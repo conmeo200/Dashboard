@@ -11,29 +11,33 @@
         <!--     Fonts and icons     -->
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
         <!-- Nucleo Icons -->
-        <link href="{{URL::asset('assets/css/nucleo-icons.css')}}" rel="stylesheet" />
-        <link href="{{URL::asset('assets/css/nucleo-svg.css')}}" rel="stylesheet" />
+        <link href="/resources/css/nucleo-icons.css" rel="stylesheet" />
+        <link href="/resources/css/nucleo-svg.css" rel="stylesheet" />
+{{--        <link href="{{URL::asset('assets/css/nucleo-icons.css')}}" rel="stylesheet" />--}}
+{{--        <link href="{{URL::asset('assets/css/nucleo-svg.css')}}" rel="stylesheet" />--}}
         <!-- Font Awesome Icons -->
         <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
         <!-- Material Icons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
         <!-- CSS Files -->
-        <link id="pagestyle" href="{{URL::asset('assets/css/material-dashboard.css')}}" rel="stylesheet" />
+        <link id="pagestyle" href="/resources/css/material-dashboard.css" rel="stylesheet" />
+{{--        <link id="pagestyle" href="{{URL::asset('assets/css/material-dashboard.css')}}" rel="stylesheet" />--}}
     </head>
     <body>
             <div id="app"></div>
     </body>
     <script src="{{ mix('/js/app.js') }}"></script>
 </html>
-<script src="{{URL::asset('assets/js/material-dashboard.min.js')}}"></script>
+<script src="/resources/js/material-dashboard.min.js"></script>
+{{--<script src="{{URL::asset('assets/js/material-dashboard.min.js')}}"></script>--}}
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!--   Core JS Files   -->
-<script src="{{URL::asset('assets/js/core/popper.min.js')}}.."></script>
-<script src="{{URL::asset('assets/js/core/bootstrap.min.js')}}../"></script>
-<script src="{{URL::asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
-<script src="{{URL::asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
-<!--   Core JS Files   -->
-<script src="{{URL::asset('assets/js/core/popper.min.js')}}" ></script>
-<script src="{{URL::asset('assets/js/core/bootstrap.min.js')}}" ></script>
-<script src="{{URL::asset('assets/js/plugins/perfect-scrollbar.min.js')}}" ></script>
-<script src="{{URL::asset('assets/js/plugins/smooth-scrollbar.min.js')}}" ></script>
+{{--<script src="{{URL::asset('assets/js/core/popper.min.js')}}.."></script>--}}
+{{--<script src="{{URL::asset('assets/js/core/bootstrap.min.js')}}../"></script>--}}
+{{--<script src="{{URL::asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>--}}
+{{--<script src="{{URL::asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>--}}
+
+<script src="/resources/js/core/popper.min.js"></script>
+<script src="/resources/js/core/bootstrap.min.js"></script>
+<script src="/resources/js/plugins/perfect-scrollbar.min.js"></script>
+<script src="/resources/js/plugins/smooth-scrollbar.min.js"></script>
