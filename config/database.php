@@ -91,6 +91,11 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'mongodb' => [
+            'dsn'      => env('DB_MONGODB_URI'), // uses the value of the DB_URI environment variable
+            'driver'   => 'mongodb',
+            'database' => env('DB_MONGODB_DATABASE'),
+        ],
     ],
 
     /*
