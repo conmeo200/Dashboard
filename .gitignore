@@ -18,3 +18,4 @@ package-lock.json
 .DS_Store
 /public/mix-manifest.json
 /public/js/app.js
+/public/fonts
