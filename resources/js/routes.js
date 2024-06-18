@@ -11,21 +11,25 @@ const routes = [
         name: 'Dashboard',
         path: '/dashboard',
         component: Dashboard,
+        meta: { breadcrumb: 'Dashboard', page: 'Dashboard' }
     },
     {
         name: 'User',
         path: '/user',
         component: User,
+        meta: { breadcrumb: 'User', page: 'User' }
     },
     {
         name: 'Role',
         path: '/role',
         component: Role,
+        meta: { breadcrumb: 'Role', page: 'Role' }
     },
     {
         name: 'Log',
         path: '/log',
         component: Log,
+        meta: { breadcrumb: 'Log', page: 'Log' }
     }
 ];
 

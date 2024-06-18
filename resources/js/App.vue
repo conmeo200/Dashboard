@@ -1,8 +1,8 @@
 <template>
     <div id="app">
-        <Menu />
+        <Menu @navigate="navigate"/>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-            <Navbar />
+            <Navbar :page="page" :breadcrumb="breadcrumb" />
             <router-view></router-view>
         </main>
     </div>
@@ -14,9 +14,26 @@
 
     export default {
         name: 'App',
-        components : {
-            Menu,
-            Navbar
+        components: {
+            Navbar,
+            Menu
+        },
+        data() {
+            return {
+                page: '',
+                breadcrumb: ''
+            };
+        },
+        watch: {
+            '$route' (to) {
+                this.page       = to.meta.page;
+                this.breadcrumb = to.meta.breadcrumb;
+            }
+        },
+        methods: {
+            navigate(routeName) {
+                this.$router.push({ name: routeName });
+            }
         }
     }
 </script>

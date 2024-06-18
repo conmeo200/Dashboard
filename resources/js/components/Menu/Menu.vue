@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item" v-if="listMenu.length" v-for="(menu, index) in listMenu">
-                    <router-link class="nav-link text-white " href="d.html" :to="menu.keyword">
+                    <router-link @click="$emit('navigate', menu.name)" class="nav-link text-white " href="d.html" :to="menu.keyword">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">{{menu.icon}}</i>
                         </div>
