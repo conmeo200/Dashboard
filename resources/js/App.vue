@@ -1,9 +1,11 @@
 <template>
-    <div id="app">
+    <div>
         <Menu @navigate="navigate"/>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <Navbar :page="page" :breadcrumb="breadcrumb" />
-            <router-view></router-view>
+            <div>
+                <router-view></router-view>
+            </div>
         </main>
     </div>
 </template>

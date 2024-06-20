@@ -1,15 +1,24 @@
 <?php
+namespace App\Service;
 
-use App\Service;
-use Psy\Exception\ThrowUpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Stripe {
-    public $serect_key;
 
-    public function __construct($serect_key) {
-        if (empty($serect_key)) throw new NotFoundHttpException('Missing Key');
+    public function add() {
+        try {
+            $stripe = new \Stripe\StripeClient(env('SECRET_KEY_STRIPE'));
+
+            $stripe->checkout->sessions->create([
+                'line_items' => [
+                    [
+                        'price' => '12',
+                        'quantity' => 1,
+                    ],
+                ],
+                'mode' => 'payment',
+                'success_url' => 'https://example.com/success',
+            ]);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
-
-    public function add() {}
-    public function list() {}
 }
