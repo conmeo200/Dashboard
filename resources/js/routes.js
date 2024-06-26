@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import User from "./components/User/User";
 import Role from "./components/Role/Role";
 import Log from "./components/Log/Log";
+import Notifications from "./components/Notification/Notifications";
 
 
 const routes = [
@@ -30,6 +31,12 @@ const routes = [
         path: '/log',
         component: Log,
         meta: { breadcrumb: 'Log', page: 'Log' }
+    },
+    {
+        name: 'Notifications',
+        path: '/notifications',
+        component: Notifications,
+        meta: { breadcrumb: 'Notifications', page: 'Notifications' }
     }
 ];
 
