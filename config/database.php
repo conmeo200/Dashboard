@@ -96,6 +96,17 @@ return [
             'driver'   => 'mongodb',
             'database' => env('DB_MONGODB_DATABASE'),
         ],
+//        'mongodb' => [
+//            'driver'   => 'mongodb',
+//            'host'     => env('MONGODB_HOST'),
+//            'port'     => env('MONGODB_PORT'),
+//            'database' => env('MONGODB_DATABASE'),
+////            'username' => env('MONGODB_USERNAME'),
+////            'password' => env('MONGODB_PASSWORD'),
+//            'options'  => [
+//                'database' => 'admin' // Phải thiết lập database là 'admin' để có thể sử dụng Replica Set
+//            ]
+//        ]
     ],
 
     /*
