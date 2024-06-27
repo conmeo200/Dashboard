@@ -9,13 +9,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RegisterUserJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-//    public $tries      = 3;
-//    public $retryAfter = 60;
+    public $tries      = 3;
+    public $retryAfter = 10;
     public $list_user  = [];
 
     /**
@@ -35,18 +36,25 @@ class RegisterUserJob implements ShouldQueue
      */
     public function handle()
     {
+        $updatedUsers = [];
+
+        foreach ($this->list_user as $index => $value) {
+            if ($value['status'] === false && $this->attempts() <= 3) {
+                $this->list_user[$index]['status'] = true;
+            }
+        }
+
         foreach ($this->list_user as $value) {
             if ($value['status'] == true) {
-                Students::query()->create($value);
-            } else {
-                throw new \Exception('Test Error');
+                $updatedUsers[] = $value;
             }
-
         }
+
+        Students::insert($updatedUsers);
     }
 
     public function failed(\Exception $exception)
     {
-        dd(1231231);
+        Log::info('Attempts: ' . $this->attempts());
     }
 }
