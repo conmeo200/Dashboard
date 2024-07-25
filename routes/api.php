@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ Route::get('/list-menu', [MenuController::class, 'listMenu'])->name('listMenu');
 
 Route::get('/register', [UserController::class, 'register'])->name('register');
 Route::get('/download-pdf', [MenuController::class, 'downloadPDF']);
+Route::get('/products', [ProductController::class, 'index']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

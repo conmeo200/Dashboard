@@ -15,9 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             //TransactionsSeeder::class
-            SubdomainSeeder::class
+            //SubdomainSeeder::class
+            ProductSeeder::class,
         ]);
-        //ProductSeeder::class,
+
          //\App\Models\User::factory(10)->create();
     }
 }
