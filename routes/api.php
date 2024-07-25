@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\UserController;
 Route::get('/list-menu', [MenuController::class, 'listMenu'])->name('listMenu');
 
 Route::get('/register', [UserController::class, 'register'])->name('register');
-
+Route::get('/download-pdf', [MenuController::class, 'downloadPDF']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

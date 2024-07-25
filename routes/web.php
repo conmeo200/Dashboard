@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
-
+        $app = app()->make('redis');
+        dd($app);
 });
 Route::get('{any}', function () {
     return view('welcome');

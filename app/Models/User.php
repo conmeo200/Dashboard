@@ -41,4 +41,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function subdomain(){
+        return $this->belongsToMany(Subdomain::class, 'subdomain_user', 'subdomain_id', 'user_id');
+    }
 }
