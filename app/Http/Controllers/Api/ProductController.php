@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Service\Products;
-use App\Traits\RedisTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class ProductController extends BaseApiController
 {
-    use RedisTrait;
     public $products;
 
     public function __construct(Products $products)
     {
+        $connect = Redis::connection();
+
+        $connect->client()->rPush();
         $this->products = $products;
     }
 
