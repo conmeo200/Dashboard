@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,10 +14,19 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-        $app = app()->make('redis');
-        dd($app);
+Route::get('/test-redis', function () {
+    $redis = Redis::connection();
+    $redis->set('test', 'Hello Redis');
+    return $redis->get('test');
 });
+
+Route::get('/test-mongodb', function () {
+    $collection = DB::connection('mongodb')->collection('test');
+    $collection->insert(['name' => 'Test MongoDB']);
+    $document = $collection->where('name', 'Test MongoDB')->first();
+    return response()->json($document);
+});
+
 Route::get('{any}', function () {
     return view('welcome');
 })->where('any', '.*');
