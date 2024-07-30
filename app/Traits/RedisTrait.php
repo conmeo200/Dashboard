@@ -7,6 +7,28 @@ use Illuminate\Support\Facades\Redis;
 
 trait RedisTrait
 {
+    public $service;
+
+    public function __construct()
+    {
+        $this->service = Redis::connection()->client();
+    }
+
+    public function setCacheListData($key, $callback)
+    {
+        dd($callback);
+        $cachedData = $this->service->lrange($key, 0, -1);
+
+        if ($cachedData) {
+            return json_decode($cachedData, true);
+        } else {
+            dd($callback);
+            $this->service->rpush(json_encode($callback));
+
+            return $callback;
+        }
+    }
+
     public function getOrSetCache($key, $callback = null, $minutes = 60)
     {
         try {

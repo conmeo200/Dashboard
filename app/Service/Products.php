@@ -11,12 +11,11 @@ class Products
     public function getListProducts($params = [])
     {
         $page = $params['page'];
+        $data = Product::query()
+            ->orderBy('id')
+            ->get()
+            ->toArray();
 
-        return $this->getOrSetCache('products_' . $page, function () {
-            return Product::query()
-                ->orderBy('id')
-                ->paginate(10)
-                ->toArray();
-        }, 60);
+        return $this->setCacheListData('products', $data);
     }
 }

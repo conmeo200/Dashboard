@@ -17,21 +17,12 @@ class ProductController extends BaseApiController
     {
         $connect = Redis::connection();
 
-        $connect->client()->rPush();
         $this->products = $products;
     }
 
     public function index(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'page' => ['numeric']
-        ]);
-
-        if ($validator->fails()) $this->sendValidator($validator->errors()->toArray());
-
-        $dataPost = $validator->validated();
-
-        $params['per_page'] = $dataPost['page'] > 0  ? $dataPost['page'] : 1;
+        $params['page'] = $request->has('page') && $request->get('page') > 0  ? $request->get('page') : 1;
 
         return response()->json($this->products->getListProducts($params));
     }

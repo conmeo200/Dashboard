@@ -11,4 +11,9 @@ class TypeProduct extends Model
     protected $table    = 'type_product';
     protected $fillable = ['id', 'name', 'keyword', 'order', 'active'];
     public $timestamps  = false;
+
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'type_product_id', 'id');
+    }
 }
