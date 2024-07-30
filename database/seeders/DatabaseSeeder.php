@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             //TransactionsSeeder::class
             //SubdomainSeeder::class
+            TypeProductSeeder::class,
             ProductSeeder::class,
         ]);
 
