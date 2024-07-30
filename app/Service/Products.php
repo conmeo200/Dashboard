@@ -10,7 +10,9 @@ class Products
 
     public function getListProducts($params = [])
     {
-        return $this->getOrSetCache('products', function () {
+        $page = $params['page'];
+
+        return $this->getOrSetCache('products_' . $page, function () {
             return Product::query()
                 ->orderBy('id')
                 ->paginate(10)

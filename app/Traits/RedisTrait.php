@@ -7,18 +7,6 @@ use Illuminate\Support\Facades\Redis;
 
 trait RedisTrait
 {
-    public $redisService;
-    public $connect;
-
-    public function __construct()
-    {
-        $this->connect = Redis::connection();
-
-        if (!$this->connect) throw new \Exception('Connect Redis Fail');
-
-        $this->redisService = $this->connect->client();
-    }
-
     public function getOrSetCache($key, $callback = null, $minutes = 60)
     {
         try {
