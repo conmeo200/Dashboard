@@ -26,4 +26,11 @@ class ProductController extends BaseApiController
 
         return response()->json($this->products->getListProducts($params));
     }
+
+    public function detail(Request $request, $id)
+    {
+        if (empty($id) || !is_numeric($id)) return $this->sendError('Data Invalid');
+
+        return $this->sendResponse($this->products->findFirstProductByID($id));
+    }
 }

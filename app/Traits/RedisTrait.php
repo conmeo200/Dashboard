@@ -16,7 +16,6 @@ trait RedisTrait
 
     public function setCacheListData($key, $callback)
     {
-        dd($callback);
         $cachedData = $this->service->lrange($key, 0, -1);
 
         if ($cachedData) {
@@ -26,6 +25,76 @@ trait RedisTrait
             $this->service->rpush(json_encode($callback));
 
             return $callback;
+        }
+    }
+
+    public function setHashCacheListData($key, $callback= null)
+    {
+        try {
+            $data       = [];
+            $cachedData = $this->service->hGetAll($key);
+
+            if ($cachedData) {
+                $data = $cachedData;
+            } else {
+                if (empty($callback)) $data = [];
+
+                foreach ($callback as $item) {
+                    $this->service->hMSet("type_product:{$item['id']}", $item);
+                }
+
+                $data = $callback;
+            }
+
+            return $data;
+        } catch (\Exception $exception) {
+            return 'Could not handle cache: ' . $exception->getMessage() . ", Line : " . $exception->getLine();
+        }
+    }
+
+    public function hmSetOrGetData($cache_key, $data_post = [])
+    {
+        try {
+            $cachedData = $this->service->hGetAll($cache_key);
+            $data       = [];
+
+            if ($cachedData) {
+                $data = $cachedData;
+            } else {
+                if (empty($data_post)) $data = [];
+                else {
+                    $this->service->hMSet($cache_key, $data_post);
+
+                    $data = $data_post;
+                }
+            }
+
+            return $data;
+
+        } catch (\Exception $exception) {
+            return 'Could not handle cache hmSetOrGet : ' . $exception->getMessage() . ", Line : " . $exception->getLine();
+        }
+    }
+
+    public function setOrGetListData($cache_key, $list_data = [])
+    {
+        try {
+            if ($this->service->exists($cache_key)) {
+                return array_map(function ($item) {
+                    return json_decode($item, true);
+                }, $this->service->lRange($cache_key, 0, -1));
+            } else {
+                if (empty($list_data)) return [];
+
+                foreach ($list_data as $item) {
+                    $this->service->rpush($cache_key, json_encode($item));
+                }
+
+                return $list_data;
+            }
+
+        } catch (\Exception $exception) {
+            return 'Could not handle cache setOrGetListData : ' . $exception->getMessage() . ", Line : " . $exception->getLine();
         }
     }
 
