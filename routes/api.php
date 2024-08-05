@@ -22,8 +22,10 @@ Route::get('/list-menu', [MenuController::class, 'listMenu'])->name('listMenu');
 
 Route::get('/register', [UserController::class, 'register'])->name('register');
 Route::get('/download-pdf', [MenuController::class, 'downloadPDF']);
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'detail']);
+Route::get('/article', [ProductController::class, 'index']);
+Route::get('/article/{id}', [ProductController::class, 'articleDetail']);
+Route::get('clear-cache', [ProductController::class, 'clearAllCache']);
+Route::get('delete-cache/{key}', [ProductController::class, 'delKeyCache']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.3",
+        "authy/php": "^4.0",
         "barryvdh/laravel-dompdf": "^2.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -14,7 +15,8 @@
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "predis/predis": "^2.2",
-        "stripe/stripe-php": "^14.10"
+        "stripe/stripe-php": "^14.10",
+        "twilio/sdk": "^8.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
