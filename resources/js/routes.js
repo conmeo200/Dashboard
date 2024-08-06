@@ -5,6 +5,7 @@ import User from "./components/User/User";
 import Role from "./components/Role/Role";
 import Log from "./components/Log/Log";
 import Notifications from "./components/Notification/Notifications";
+import Form from "./components/Form/Form";
 
 
 const routes = [
@@ -37,6 +38,11 @@ const routes = [
         path: '/notifications',
         component: Notifications,
         meta: { breadcrumb: 'Notifications', page: 'Notifications' }
+    },
+    {
+        name: 'Form',
+        path: '/form',
+        component: Form,
     }
 ];
 

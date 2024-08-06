@@ -8,21 +8,22 @@ class Products
 {
     use RedisTrait;
 
+    public $redis;
     public $cacheKey;
 
     public function __construct()
     {
+        $this->redis    = app()->make('redis');
         $this->cacheKey = 'type_product';
     }
 
     public function getListProducts($params = [])
     {
-        $data = Product::query()
+
+        return Product::query()
             ->orderBy('id')
             ->get()
             ->toArray();
-
-        return $this->setOrGetListData($this->cacheKey, $data);
     }
 
     public function findFirstProductByID($id)

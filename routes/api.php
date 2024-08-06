@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\Leadform\LeadformController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ Route::get('/article', [ProductController::class, 'index']);
 Route::get('/article/{id}', [ProductController::class, 'articleDetail']);
 Route::get('clear-cache', [ProductController::class, 'clearAllCache']);
 Route::get('delete-cache/{key}', [ProductController::class, 'delKeyCache']);
+Route::post('lead-form', [LeadformController::class, 'create']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
