@@ -6,6 +6,8 @@ import Role from "./components/Role/Role";
 import Log from "./components/Log/Log";
 import Notifications from "./components/Notification/Notifications";
 import Form from "./components/Form/Form";
+import Products from "./components/Products/Products";
+import CreateProduct from "./components/Products/CreateProduct";
 
 
 const routes = [
@@ -43,6 +45,16 @@ const routes = [
         name: 'Form',
         path: '/form',
         component: Form,
+    },
+    {
+        name: 'Products',
+        path: '/products',
+        component: Products,
+    },
+    {
+        name: 'CreateProduct',
+        path: '/create-product',
+        component: CreateProduct,
     }
 ];
 

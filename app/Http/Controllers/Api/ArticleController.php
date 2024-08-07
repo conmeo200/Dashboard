@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Twilio\Rest\Client;
 
 
-class ProductController extends BaseApiController
+class ArticleController extends BaseApiController
 {
     use RedisTrait;
     public $products;
