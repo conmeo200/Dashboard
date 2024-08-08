@@ -5,11 +5,13 @@
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" v-model="name" id="name" class="form-control" />
+                <span class="error">{{errors.name}}</span>
             </div>
 
             <div class="form-group">
                 <label for="type">Type:</label>
                 <input type="text" v-model="type" id="type" class="form-control" />
+                <span class="error">{{errors.type}}</span>
             </div>
 
             <div class="form-group">
@@ -21,6 +23,7 @@
                     class="form-control"
                     id="price"
                 />
+                <span class="error">{{errors.price}}</span>
             </div>
 
             <div class="form-group">
@@ -51,6 +54,12 @@
                 maxLength    : 10,
                 leadingZero  : true,
                 allowDecimal : false,
+                errors       : {
+                    name   : '',
+                    price  : '',
+                    type   : '',
+                    images : '',
+                }
             };
         },
         methods: {
@@ -88,15 +97,28 @@
             },
             async submitForm() {
                 const formData = new FormData();
-                formData.append('username', this.username);
 
-                // Thêm tất cả các tệp tin vào FormData
+                if (!this.errors.name) {
+                    this.errors.name = 'This is field required';
+                }
+                if (!this.errors.type) {
+                    this.errors.type = 'This is field required';
+                }
+                if (!this.errors.price) {
+                    this.errors.price = 'This is field required';
+                }
+
                 this.files.forEach((file, index) => {
                     formData.append(`files[${index}]`, file);
                 });
 
+                formData.append('name', this.name);
+                formData.append('type', this.type);
+                formData.append('price', this.price);
+                formData.append('file', this.file);
+
                 try {
-                    const response = await axios.post('http://dashboard.test/api/lead-form', formData, {
+                    const response = await axios.post('http://dashboard.test/api/product', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         },
@@ -155,5 +177,9 @@
 
     .mt-5 {
         margin-top: 3rem;
+    }
+
+    .error {
+        color: red;
     }
 </style>

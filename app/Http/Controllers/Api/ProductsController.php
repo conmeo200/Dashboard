@@ -29,6 +29,7 @@ class ProductsController extends BaseApiController
 
     public function handleCreate(Request $request)
     {
+        dd($request->all());
         return $this->sendPaginationResponse($this->products->getListProducts());
     }
 

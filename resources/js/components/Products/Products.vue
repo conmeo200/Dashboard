@@ -7,30 +7,23 @@
         <table class="table table-striped table-hover shadow-sm">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Handle</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Price</th>
+                <th scope="col">Action</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody v-for="(product, index) in products" :key="index" class="test">
             <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
+                <td>#{{product.id}}</td>
+                <td>{{product.name}}</td>
+                <td>{{product.type_product_id}}</td>
+                <td>{{product.price}}</td>
+                <td>
+                    <button class="btn btn-primary" @click="View(product.id)" style="margin-right: 10px;">View</button>
+<button class="btn btn-danger" @click="handleDelete(product.id)">Delete</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -45,35 +38,67 @@
 
         data() {
             return {
-                username: '',
-                files: [],
+                products: [],
             };
         },
+        mounted() {
+            this.fetchProducts();
+        },
         methods: {
-            handleFileChange(event) {
-                this.files = Array.from(event.target.files);
-            },
-            async submitForm() {
-                const formData = new FormData();
-                formData.append('username', this.username);
-
-                // Thêm tất cả các tệp tin vào FormData
-                this.files.forEach((file, index) => {
-                    formData.append(`files[${index}]`, file);
-                });
-
+            async fetchProducts() {
+                let url = 'http://Dashboard.test/api/products';
                 try {
-                    const response = await axios.post('http://dashboard.test/api/lead-form', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    });
-                    console.log('Response:', response.data);
-                } catch (error) {
-                    console.error('Error:', error);
+                    await axios
+                        .get(url)
+                        .then(response => {
+                            var list   = response.data;
+
+                            if (list.data.length ) {
+                                this.products = list.data;
+                            }
+
+                        }).catch(error => {
+                            this.errors = error.response.data.message;
+                        });
+                } catch (e) {
+                    this.errors = e.response.data.message;
                 }
             },
-        },
+            handleDelete(id) {
+                let url = 'http://Dashboard.test/api/delete/';
+                try {
+                    axios
+                        .delete(url + id)
+                        .then(response => {
+                            var list   = response.data;
+                            if (list.data.length ) {
+                                this.users = list.data;
+                            }
+                        }).catch(error => {
+                        this.errors = error.response.data.message;
+                    });
+                } catch (e) {
+                    this.errors = e.response.data.message;
+                }
+            },
+            View(id) {
+                let url = 'http://Dashboard.test/api/product/';
+                try {
+                    axios
+                        .get(url + id)
+                        .then(response => {
+                            var list   = response.data;
+                            if (list.data.length ) {
+                                this.users = list.data;
+                            }
+                        }).catch(error => {
+                        this.errors = error.response.data.message;
+                    });
+                } catch (e) {
+                    this.errors = e.response.data.message;
+                }
+            }
+        }
     };
 </script>
 <style scoped>
