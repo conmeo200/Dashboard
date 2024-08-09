@@ -4,6 +4,7 @@
             <h1 class="h3">Product List</h1>
             <router-link to="/create-product" class="btn btn-dark">Add Product</router-link>
         </div>
+
         <table class="table table-striped table-hover shadow-sm">
             <thead class="thead-dark">
             <tr>
@@ -14,31 +15,64 @@
                 <th scope="col">Action</th>
             </tr>
             </thead>
-            <tbody v-for="(product, index) in products" :key="index" class="test">
+            <tbody v-for="(value, index) in products" :key="index" class="test">
             <tr>
-                <td>#{{product.id}}</td>
-                <td>{{product.name}}</td>
-                <td>{{product.type_product_id}}</td>
-                <td>{{product.price}}</td>
+                <td>#{{value.id}}</td>
+                <td>{{value.name}}</td>
+                <td>{{value.type_product_id}}</td>
+                <td>{{value.price}}</td>
                 <td>
-                    <button class="btn btn-primary" @click="View(product.id)" style="margin-right: 10px;">View</button>
-<button class="btn btn-danger" @click="handleDelete(product.id)">Delete</button>
+                    <button class="btn btn-primary" @click="View(value.id)" style="margin-right: 10px;">View</button>
+                    <button class="btn btn-danger" @click="handleDelete(value.id)">Delete</button>
                 </td>
             </tr>
             </tbody>
         </table>
+        <Modal :isVisible="showModal" @close="showModal = false">
+            <CreateProduct
+            :product = "modelProduct"
+            :isEditMode  = "isEditing"
+            />
+        </Modal>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
+    import Modal from '../Modal/Modal.vue';
+    import CreateProduct from './CreateProduct.vue';
 
     export default {
         name: "Products",
-
+        components: {
+            Modal,
+            CreateProduct
+        },
         data() {
             return {
-                products: [],
+                products     : [],
+                showModal    : false,
+                name         : '',
+                price        : 0,
+                type         : '',
+                images       : [],
+                maxLength    : 10,
+                leadingZero  : true,
+                allowDecimal : false,
+                errors       : {
+                    name   : '',
+                    price  : '',
+                    type   : '',
+                    images : '',
+                },
+                isEditing  : true,
+                modelProduct      : {
+                    id     : '',
+                    name   : '',
+                    price  : '',
+                    images : '',
+                    type   : '',
+                }
             };
         },
         mounted() {
@@ -72,7 +106,7 @@
                         .then(response => {
                             var list   = response.data;
                             if (list.data.length ) {
-                                this.users = list.data;
+                                this.products = list.data;
                             }
                         }).catch(error => {
                         this.errors = error.response.data.message;
@@ -83,17 +117,23 @@
             },
             View(id) {
                 let url = 'http://Dashboard.test/api/product/';
+                this.showModal      = true;
                 try {
                     axios
                         .get(url + id)
                         .then(response => {
                             var list   = response.data;
-                            if (list.data.length ) {
-                                this.users = list.data;
+
+                            if (list.data) {
+                                const data          = list.data;
+
+                                this.modelProduct.id     = data.id;
+                                this.modelProduct.name   = data.name;
+                                this.modelProduct.price  = data.price;
+                                this.modelProduct.images = data.images;
+                                this.modelProduct.type   = data.type_product_id;
                             }
-                        }).catch(error => {
-                        this.errors = error.response.data.message;
-                    });
+                        }).catch(error => {this.errors = error.response.data.message;});
                 } catch (e) {
                     this.errors = e.response.data.message;
                 }

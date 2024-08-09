@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Product;
 use App\Service\Products;
 use App\Traits\RedisTrait;
 use Illuminate\Http\Request;
@@ -24,7 +25,11 @@ class ProductsController extends BaseApiController
 
     public function detail(Request $request, $id)
     {
-        return $this->sendPaginationResponse($this->products->getListProducts());
+        $model = Product::query()->where(['id' => $id])->first();
+
+        if (!$model) return $this->sendError("Data ID : {$id} Not Found !");
+
+        return $this->sendResponse($model);
     }
 
     public function handleCreate(Request $request)

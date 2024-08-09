@@ -1,4 +1,3 @@
-<!-- src/components/MyForm.vue -->
 <template>
     <div class="container mt-5">
         <form @submit.prevent="submitForm" class="border p-4 shadow-sm">
@@ -33,7 +32,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <button @click="goBack" class="btn btn-danger">Back</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Update' : 'Submit' }}</button>
             </div>
         </form>
     </div>
@@ -43,24 +42,46 @@
     import axios from 'axios';
 
     export default {
-        name: "CreateProduct",
-
+        name: "MyForm",
+        props: {
+            product: {
+                type: Object,
+                default: () => ({ id: -1, name: '', price: 0, type: '', images: [] })
+            },
+            isEditMode: {
+                type: Boolean,
+                default: false
+            }
+        },
         data() {
             return {
-                name         : '',
-                price        : 0,
-                type         : '',
-                images       : [],
-                maxLength    : 10,
-                leadingZero  : true,
-                allowDecimal : false,
-                errors       : {
-                    name   : '',
-                    price  : '',
-                    type   : '',
-                    images : '',
+                name: '',
+                price: 0,
+                type: '',
+                images: [],
+                maxLength: 10,
+                leadingZero: true,
+                allowDecimal: false,
+                errors: {
+                    name: '',
+                    price: '',
+                    type: '',
+                    images: ''
                 }
             };
+        },
+        watch: {
+            product: {
+                handler(newValue) {
+                    if (this.isEditMode) {
+                        this.name = newValue.name;
+                        this.price = newValue.price;
+                        this.type = newValue.type;
+                        this.images = newValue.images;
+                    }
+                },
+                deep: true
+            }
         },
         methods: {
             numberOnly(event, maxLength, leadingZero = true, allowDecimal = false) {
@@ -93,29 +114,29 @@
                 this.$router.push('/products');
             },
             handleFileChange(event) {
-                this.files = Array.from(event.target.files);
+                this.images = Array.from(event.target.files); // Cập nhật hình ảnh
             },
             async submitForm() {
                 const formData = new FormData();
 
-                if (!this.errors.name) {
-                    this.errors.name = 'This is field required';
+                // Kiểm tra lỗi và thêm vào `formData`
+                if (!this.name) {
+                    this.errors.name = 'This field is required';
                 }
-                if (!this.errors.type) {
-                    this.errors.type = 'This is field required';
+                if (!this.type) {
+                    this.errors.type = 'This field is required';
                 }
-                if (!this.errors.price) {
-                    this.errors.price = 'This is field required';
+                if (!this.price) {
+                    this.errors.price = 'This field is required';
                 }
 
-                this.files.forEach((file, index) => {
-                    formData.append(`files[${index}]`, file);
+                this.images.forEach((file, index) => {
+                    formData.append(`images[${index}]`, file); // Sửa `files` thành `images`
                 });
 
                 formData.append('name', this.name);
                 formData.append('type', this.type);
                 formData.append('price', this.price);
-                formData.append('file', this.file);
 
                 try {
                     const response = await axios.post('http://dashboard.test/api/product', formData, {
@@ -127,8 +148,8 @@
                 } catch (error) {
                     console.error('Error:', error);
                 }
-            },
-        },
+            }
+        }
     };
 </script>
 <style scoped>
