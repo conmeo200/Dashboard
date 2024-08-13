@@ -1,6 +1,8 @@
 <template>
     <div v-if="isVisible" class="modal-overlay" @click="close">
       <div class="modal-content" @click.stop>
+        <h3>{{ title }}</h3>
+        <p>{{ content }}</p>
         <button class="close-button" @click="close">X</button>
         <slot></slot>
       </div>
@@ -14,6 +16,14 @@
       isVisible: {
         type: Boolean,
         default: false,
+      },
+      content : {
+        type: Text,
+        default: 'content',
+      },
+      title : {
+        type: Text,
+        default: 'title',
       }
     },
     methods: {
@@ -42,7 +52,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 5px;
-    width: 400px;
+    width: 800px;
     max-width: 100%;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }

@@ -8,6 +8,7 @@ import Notifications from "./components/Notification/Notifications";
 import Form from "./components/Form/Form";
 import Products from "./components/Products/Products";
 import CreateProduct from "./components/Products/CreateProduct";
+import LeadForm from "./components/LeadForm/FormTest.vue";
 
 
 const routes = [
@@ -55,6 +56,11 @@ const routes = [
         name: 'CreateProduct',
         path: '/create-product',
         component: CreateProduct,
+    },
+    {
+        name: 'LeadForm',
+        path: '/leadform',
+        component: LeadForm,
     }
 ];
 

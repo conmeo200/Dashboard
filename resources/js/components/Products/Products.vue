@@ -28,9 +28,14 @@
             </tr>
             </tbody>
         </table>
-        <Modal :isVisible="showModal" @close="showModal = false">
+        <Modal
+        :isVisible="showModal"
+        @close="showModal = false"
+        :content="content_modal"
+        :title="title_modal"
+        >
             <CreateProduct
-            :product = "modelProduct"
+            :product     = "modelProduct"
             :isEditMode  = "isEditing"
             />
         </Modal>
@@ -72,7 +77,9 @@
                     price  : '',
                     images : '',
                     type   : '',
-                }
+                },
+                content_modal : '',
+                title_modal   : '',
             };
         },
         mounted() {
@@ -132,6 +139,8 @@
                                 this.modelProduct.price  = data.price;
                                 this.modelProduct.images = data.images;
                                 this.modelProduct.type   = data.type_product_id;
+                                this.content_modal       = `Information`;
+                                this.title_modal         = `Product # ${data.id}`;
                             }
                         }).catch(error => {this.errors = error.response.data.message;});
                 } catch (e) {

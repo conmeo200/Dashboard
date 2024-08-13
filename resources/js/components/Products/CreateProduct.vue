@@ -31,7 +31,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <button @click="goBack" class="btn btn-danger">Back</button>
+                <button @click="goBack" class="btn btn-danger" v-if="!isEditMode">Back</button>
                 <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Update' : 'Submit' }}</button>
             </div>
         </form>
