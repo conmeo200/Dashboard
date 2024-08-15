@@ -82,7 +82,8 @@
     },
     methods: {
       handleFileChange(event) {
-        // Lấy các tệp tin từ input
+        console.log(event.target.files);
+
         this.formData.files = Array.from(event.target.files);
       },
       async handleSubmit() {
