@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Service;
 
 use Twilio\Rest\Client;
 use GuzzleHttp\Client as HttpClient;

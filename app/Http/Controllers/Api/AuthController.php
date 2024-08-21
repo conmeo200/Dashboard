@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\TwilioService;
+use App\Service\TwilioService;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -24,7 +24,7 @@ class AuthController extends Controller
         ]);
 
         $user = $this->twilioService->registerUser($request->email, $request->phone, $request->country_code);
-
+dd($user);
         if ($user['success']) {
             // Lưu Authy ID của người dùng vào cơ sở dữ liệu
             // $request->user()->update(['authy_id' => $user['user']['id']]);
@@ -38,7 +38,7 @@ class AuthController extends Controller
     {
         $authyId  = $request->input('authy_id');
         $response = $this->twilioService->sendToken($authyId);
-
+dd($response);
         if ($response['success']) return response()->json(['message' => 'OTP sent']);
         else return response()->json(['error' => $response['message']], 400);
     }
