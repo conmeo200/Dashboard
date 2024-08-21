@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Item;
 use Illuminate\Http\Request;
 
-class ItemController extends Controller
+class ItemController extends BaseApiController
 {
     public function index()
     {
-        return Item::query()->orderBy('create_at', 'DESC')->get();
+        return $this->sendResponse(Item::query()->get());
     }
 
     public function create()
@@ -19,12 +20,13 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        return Item::query()->create($request->get('name'));
+        $data['name'] = $request->get('name');
+        return $this->sendResponse(Item::query()->create($data));
     }
 
     public function show($id)
     {
-        return Item::query()->where(['id' => $id])->first();
+        return $this->sendResponse(Item::query()->where(['id' => $id])->first());
     }
 
     public function edit($id)
@@ -34,11 +36,14 @@ class ItemController extends Controller
 
     public function update(Request $request, $id)
     {
-        return Item::query()->updateOrInsert(['id' => $id], $request->get('name'));
+        $data['name'] = $request->get('name');
+        Item::query()->updateOrInsert(['id' => $id], $data);
+
+        return $this->sendResponse(Item::query()->where(['id' => $id])->first());
     }
 
     public function destroy($id)
     {
-        return Item::query()->where(['id' => $id])->delete();
+        return $this->sendResponse(Item::query()->where(['id' => $id])->delete());
     }
 }
