@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Products\ProductsInterface;
+use App\Repositories\Products\ProductsRepository;
 use Illuminate\Support\ServiceProvider;
 
 class ResponsiveProvider extends ServiceProvider
@@ -13,7 +15,7 @@ class ResponsiveProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(ProductsInterface::class, ProductsRepository::class);
     }
 
     /**
