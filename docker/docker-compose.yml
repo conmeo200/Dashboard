@@ -1,29 +1,43 @@
 version: '3.8'
 
 services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php-app
+    container_name: php_app
+    ports:
+      - "8000:9000"
+    volumes:
+      - ./docker:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+      # - mongodb
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: redis_db
     ports:
       - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - my_network
 
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - my_network
+  # mongodb:
+  #   image: mongo:latest
+  #   container_name: mongodb_db
+  #   ports:
+  #     - "27017:27017"
 
 volumes:
-  redis_data:
-  mongo_data:
-
-networks:
-  my_network:
+  mysql_data:
