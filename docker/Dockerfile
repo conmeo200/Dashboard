@@ -29,8 +29,8 @@ COPY . /var/www/html
 # Đặt thư mục làm việc
 WORKDIR /var/www/html
 
-# Expose port 9000
+# Expose port 9000 (port của PHP-FPM)
 EXPOSE 9000
 
-# Chạy PHP-FPM
+# CMD mặc định cho PHP-FPM
 CMD ["php-fpm"]
