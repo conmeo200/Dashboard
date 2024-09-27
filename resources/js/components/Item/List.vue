@@ -31,10 +31,10 @@
 <script>
     import axios from 'axios';
     import Modal from '../Modal/Modal.vue';
-    import CreateProduct from './CreateProduct.vue';
+    import CreateProduct from '../Products/CreateProduct';
 
     export default {
-        name: "Item",
+        name: "ListItem",
         components: {
             Modal,
             CreateProduct
