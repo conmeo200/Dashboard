@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const webpack = require('webpack'); // Thêm dòng này để yêu cầu Webpack
 
 /*
  |--------------------------------------------------------------------------
@@ -15,4 +16,13 @@ mix.js('resources/js/app.js', 'public/js')
     .vue()
     .postCss('resources/css/app.css', 'public/css', [
         //
-    ]);
+    ])
+    .webpackConfig({
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    VUE_APP_API_URL: JSON.stringify(process.env.URL_API),
+                }
+            })
+        ]
+    });

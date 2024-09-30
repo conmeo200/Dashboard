@@ -4,7 +4,6 @@
             <h1 class="h3">Product List</h1>
             <router-link to="/create-product" class="btn btn-dark">Add Product</router-link>
         </div>
-        <Paginate :page="paginate.page" :per-page="paginate.perPage" :records="paginate.records" :records-length="paginate.recordsLength"></Paginate>
         <table class="table table-striped table-hover shadow-sm">
             <thead class="thead-dark">
             <tr>
@@ -46,23 +45,16 @@
     import axios from 'axios';
     import Modal from '../Modal/Modal.vue';
     import CreateProduct from './CreateProduct.vue';
-    import Paginate from '../Generate/Paginate.vue';
 
     export default {
         name: "Products",
         components: {
             Modal,
-            CreateProduct,
-            Paginate
+            CreateProduct
         },
         data() {
             return {
-                paginate :  {
-                    page          : 1,
-                    perPage       : 20,
-                    records       : this.products,
-                    recordsLength : 10
-                },
+                url_api      : process.env.VUE_APP_API_URL,
                 products     : [],
                 showModal    : false,
                 name         : '',
@@ -95,6 +87,7 @@
         },
         methods: {
             async fetchProducts() {
+                console.log(this.url_api + '/products');
                 let url = 'http://Dashboard.test/api/products';
                 try {
                     await axios
