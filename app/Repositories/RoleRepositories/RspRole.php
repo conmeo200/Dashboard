@@ -16,7 +16,7 @@ class RspRole extends BaseRepository
 
     public function getList($param = [])
     {
-        return parent::paginate(10);
+        return parent::paginate(1);
     }
 
     public function findFirstById($id)

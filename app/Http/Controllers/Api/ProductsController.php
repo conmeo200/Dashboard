@@ -20,7 +20,7 @@ class ProductsController extends BaseApiController
 
     public function index(Request $request)
     {
-        return $this->sendResponse($this->products->getListProducts());
+        return $this->sendPaginationResponse($this->products->getListProducts());
     }
 
     public function detail(Request $request, $id)

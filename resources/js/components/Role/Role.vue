@@ -43,6 +43,7 @@
         },
         data() {
             return {
+                url_api : process.env.VUE_APP_API_URL,
                 roles: [],
                 paginationData: null // Dữ liệu pagination từ API
             };

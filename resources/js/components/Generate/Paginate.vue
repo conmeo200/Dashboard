@@ -1,17 +1,39 @@
 <template>
     <nav v-if="pagination">
         <ul class="pagination">
+            <!-- Nút quay lại -->
             <li :class="{'disabled': !pagination.prev_page_url}">
                 <a href="#" @click.prevent="changePage(pagination.current_page - 1)" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
 
-            <!-- Tạo ra danh sách các trang -->
-            <li v-for="page in pages" :key="page" :class="{'active': page === pagination.current_page}">
+            <!-- Nút đầu tiên -->
+            <li :class="{'active': 1 === pagination.current_page}">
+                <a href="#" @click.prevent="changePage(1)">1</a>
+            </li>
+
+            <!-- Hiển thị dấu "..." nếu cần -->
+            <li v-if="pagination.current_page > range + 2">
+                <span>...</span>
+            </li>
+
+            <!-- Hiển thị các trang xung quanh trang hiện tại -->
+            <li v-for="page in paginatedPages" :key="page" :class="{'active': page === pagination.current_page}">
                 <a href="#" @click.prevent="changePage(page)">{{ page }}</a>
             </li>
 
+            <!-- Hiển thị dấu "..." nếu cần -->
+            <li v-if="pagination.current_page < pagination.last_page - range - 1">
+                <span>...</span>
+            </li>
+
+            <!-- Nút cuối cùng -->
+            <li :class="{'active': pagination.last_page === pagination.current_page}">
+                <a href="#" @click.prevent="changePage(pagination.last_page)">{{ pagination.last_page }}</a>
+            </li>
+
+            <!-- Nút tới -->
             <li :class="{'disabled': !pagination.next_page_url}">
                 <a href="#" @click.prevent="changePage(pagination.current_page + 1)" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
@@ -30,12 +52,20 @@
             }
         },
         computed: {
-            pages() {
-                const pageArray = [];
-                for (let i = 1; i <= this.pagination.last_page; i++) {
-                    pageArray.push(i);
+            // Số trang muốn hiển thị xung quanh trang hiện tại
+            range() {
+                return 2; // Hiển thị 2 trang trước và sau trang hiện tại
+            },
+            paginatedPages() {
+                const pages = [];
+                const start = Math.max(this.pagination.current_page - this.range, 2); // Bắt đầu từ trang 2 trở đi
+                const end   = Math.min(this.pagination.current_page + this.range, this.pagination.last_page - 1); // Dừng trước trang cuối
+
+                for (let i = start; i <= end; i++) {
+                    pages.push(i);
                 }
-                return pageArray;
+
+                return pages;
             }
         },
         methods: {
@@ -77,5 +107,10 @@
     .pagination li.disabled a {
         color: #ccc;
         cursor: not-allowed;
+    }
+
+    .pagination li span {
+        padding: 8px 12px;
+        color: #555;
     }
 </style>

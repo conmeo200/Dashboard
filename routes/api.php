@@ -34,8 +34,9 @@ Route::get('clear-cache', [ArticleController::class, 'clearAllCache']);
 Route::get('delete-cache/{key}', [ArticleController::class, 'delKeyCache']);
 Route::post('lead-form', [LeadformController::class, 'create']);
 
-Route::get('products', [ProductsController::class, 'index']);
-Route::prefix('/product')->group(function () {
+
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductsController::class, 'index']);
     Route::get('/{id}', [ProductsController::class, 'detail']);
     Route::post('/store', [ProductsController::class, 'handleCreate']);
     Route::post('/{id}', [ProductsController::class, 'handleEdit']);
