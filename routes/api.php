@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\Leadform\LeadformController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,11 @@ Route::prefix('/item')->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+
+Route::prefix('roles')->group(function () {
+    Route::get('/', [RoleController::class, 'getList']);
+    Route::get('{id}', [RoleController::class, 'detail']);
+});
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();

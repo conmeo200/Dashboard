@@ -1,60 +1,81 @@
 <template>
-    <p>Selected page: {{page}}</p>
-    <ul>
-        <li v-for="(record, index) of records" :key="index">{{record}}</li>
-    </ul>
-    <div :records="recordsLength" :page="page" :per-page="perPage" @paginate="getPage"></div>
+    <nav v-if="pagination">
+        <ul class="pagination">
+            <li :class="{'disabled': !pagination.prev_page_url}">
+                <a href="#" @click.prevent="changePage(pagination.current_page - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Tạo ra danh sách các trang -->
+            <li v-for="page in pages" :key="page" :class="{'active': page === pagination.current_page}">
+                <a href="#" @click.prevent="changePage(page)">{{ page }}</a>
+            </li>
+
+            <li :class="{'disabled': !pagination.next_page_url}">
+                <a href="#" @click.prevent="changePage(pagination.current_page + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </template>
 
 <script>
-    // export default {
-    //     name: "Paginate",
-    //     props : {
-    //       page : {
-    //           default:1
-    //       },
-    //       perPage : {
-    //           default:20
-    //       },
-    //       records : {
-    //           default:[]
-    //       },
-    //        recordsLength : {
-    //           default: 500
-    //       },
-    //     },
-    //     data() {
-    //         return {
-    //             page          : 1,
-    //             perPage       : 20,
-    //             records       : [],
-    //             recordsLength : 0
-    //         }
-    //     },
-    //     methods: {
-    //         getPage: function(page) {
-    //             console.log(this.records);
-    //             this.records     = [];
-    //             const startIndex = this.perPage * (page - 1) + 1;
-    //             const endIndex   = startIndex + this.perPage - 1;
-    //
-    //             for (let i = startIndex; i <= endIndex; i++) {
-    //                 this.records.push(`Item ${i}`);
-    //             }
-    //         },
-    //         // getRecordsLength() {
-    //         //     this.recordsLength = 500;
-    //         // }
-    //     },
-    //     created() {
-    //         //this.getRecordsLength();
-    //         this.getPage(this.page);
-    //     }
-    // }
+    export default {
+        props: {
+            pagination: {
+                type: Object,
+                required: true
+            }
+        },
+        computed: {
+            pages() {
+                const pageArray = [];
+                for (let i = 1; i <= this.pagination.last_page; i++) {
+                    pageArray.push(i);
+                }
+                return pageArray;
+            }
+        },
+        methods: {
+            changePage(page) {
+                if (page >= 1 && page <= this.pagination.last_page) {
+                    this.$emit('page-changed', page);
+                }
+            }
+        }
+    }
 </script>
 
 <style scoped>
-    [v-cloak] {
-        display: none;
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination li a {
+        padding: 8px 12px;
+        color: #007bff;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .pagination li.active a {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .pagination li.disabled a {
+        color: #ccc;
+        cursor: not-allowed;
     }
 </style>
