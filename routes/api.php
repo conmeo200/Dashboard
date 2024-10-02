@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\Leadform\LeadformController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +34,9 @@ Route::get('clear-cache', [ArticleController::class, 'clearAllCache']);
 Route::get('delete-cache/{key}', [ArticleController::class, 'delKeyCache']);
 Route::post('lead-form', [LeadformController::class, 'create']);
 
-Route::get('products', [ProductsController::class, 'index']);
-Route::prefix('/product')->group(function () {
+
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductsController::class, 'index']);
     Route::get('/{id}', [ProductsController::class, 'detail']);
     Route::post('/store', [ProductsController::class, 'handleCreate']);
     Route::post('/{id}', [ProductsController::class, 'handleEdit']);
@@ -53,6 +55,11 @@ Route::prefix('/item')->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+
+Route::prefix('roles')->group(function () {
+    Route::get('/', [RoleController::class, 'getList']);
+    Route::get('{id}', [RoleController::class, 'detail']);
+});
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();

@@ -4,7 +4,6 @@
             <h1 class="h3">Product List</h1>
             <router-link to="/create-product" class="btn btn-dark">Add Product</router-link>
         </div>
-
         <table class="table table-striped table-hover shadow-sm">
             <thead class="thead-dark">
             <tr>
@@ -28,6 +27,7 @@
             </tr>
             </tbody>
         </table>
+        <Pagination :pagination="paginationData" @page-changed="fetchProducts" />
         <Modal
         :isVisible="showModal"
         @close="showModal = false"
@@ -46,15 +46,18 @@
     import axios from 'axios';
     import Modal from '../Modal/Modal.vue';
     import CreateProduct from './CreateProduct.vue';
+    import Pagination from '../Generate/Paginate.vue';
 
     export default {
         name: "Products",
         components: {
             Modal,
-            CreateProduct
+            CreateProduct,
+            Pagination
         },
         data() {
             return {
+                url_api      : process.env.VUE_APP_API_URL,
                 products     : [],
                 showModal    : false,
                 name         : '',
@@ -80,22 +83,24 @@
                 },
                 content_modal : '',
                 title_modal   : '',
+                paginationData : null
             };
         },
         mounted() {
             this.fetchProducts();
         },
         methods: {
-            async fetchProducts() {
-                let url = 'http://Dashboard.test/api/products';
+            async fetchProducts(page = 1) {
+                let url = this.url_api + '/products?page=' + page;
                 try {
                     await axios
                         .get(url)
                         .then(response => {
                             var list   = response.data;
-
+                            console.log(list);
                             if (list.data.length ) {
-                                this.products = list.data;
+                                this.products       = list.data;
+                                this.paginationData = list.pagination;
                             }
 
                         }).catch(error => {

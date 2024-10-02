@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 class BaseApiController extends Controller
 {
@@ -112,5 +113,17 @@ class BaseApiController extends Controller
         );
 
         return $this->sendPaginationResponse($paginator, $message);
+    }
+
+    public function paginate($items, $perPage = 15, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+
+        return new LengthAwarePaginator(array_values($items->forPage($page, $perPage)->toArray()), $items->count(), $perPage, $page, [
+            'path'     => Paginator::resolveCurrentPath(),
+            'pageName' => 'page',
+        ]);
     }
 }

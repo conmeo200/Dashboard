@@ -19,7 +19,7 @@ class Products
 
     public function getListProducts($params = [])
     {
-        return Product::query()->orderBy('id')->get();
+        return Product::query()->orderBy('id')->paginate(20);
     }
 
     public function findFirstProductByID($id)
