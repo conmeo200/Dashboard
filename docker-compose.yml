@@ -1,41 +1,3 @@
-# version: '3.8'
-
-# services:
-#   web:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     image: php-app
-#     container_name: Dashboard
-#     ports:
-#       - "8000:80" 
-#     volumes:
-#       - .:/var/www/html
-#     depends_on:
-#       - mysql
-#       - redis
-#       # - mongodb
-
-#   mysql:
-#     image: mysql:latest
-#     container_name: mysql_db
-#     environment:
-#       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-#       MYSQL_DATABASE: laravel
-#     ports:
-#       - "3307:3306"
-
-#   redis:
-#     image: redis:latest
-#     container_name: redis_db
-#     ports:
-#       - "6379:6379"
-
-  # mongodb:
-  #   image: mongo:latest
-  #   container_name: mongodb_db
-  #   ports:
-  #     - "27017:27017"
 version: '3'
 services:
   app:
@@ -62,13 +24,15 @@ services:
       - laravel
 
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     container_name: laravel_mysql
     environment:
       MYSQL_ROOT_PASSWORD: root1
       MYSQL_DATABASE: laravel
+      MYSQL_USER: root12
+      MYSQL_PASSWORD: root
     volumes:
-      - ./docker/mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql 
     ports:
       - "3308:3306"
     networks:
@@ -78,7 +42,7 @@ services:
     image: redis:alpine
     container_name: laravel_redis
     ports:
-      - "6379:6379"  # Mở cổng Redis
+      - "6379:6379"  # Mở cổng  
     networks:
       - laravel
 
