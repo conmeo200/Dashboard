@@ -13,11 +13,13 @@ class AddColumnTypeProductInProducts extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('type_product_id');
-
-            $table->foreign('type_product_id')->references('id')->on('type_product')->onDelete('cascade');
-        });
+        if (!Schema::hasColumn('products', 'type_product_id')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->unsignedBigInteger('type_product_id');
+    
+                //$table->foreign('type_product_id')->references('id')->on('type_product')->onDelete('cascade');
+            });
+        }
     }
 
     /**
@@ -27,8 +29,10 @@ class AddColumnTypeProductInProducts extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('type_product_id');
-        });
+        if (Schema::hasColumn('products', 'type_product_id')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropColumn('type_product_id');
+            });
+        }
     }
 }

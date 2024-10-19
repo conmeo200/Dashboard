@@ -29,7 +29,8 @@
         name: "Menu",
         data: function () {
             return {
-                listMenu : {}
+                listMenu : {},
+                url_api  : process.env.VUE_APP_API_URL,
             }
         },
         created() {
@@ -37,7 +38,8 @@
         },
         methods: {
             async getListMenu() {
-                let url = 'http://Dashboard.test/api/list-menu';
+                let url = this.url_api + '/list-menu';
+                console.log(url);
                 try {
                     await axios
                         .get(url)
