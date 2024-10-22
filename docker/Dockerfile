@@ -1,5 +1,5 @@
 # Sử dụng image PHP chính thức
-FROM php:8.1-fpm
+FROM php:8.0-fpm
 
 # Cài đặt các thư viện và tiện ích cần thiết
 RUN apt-get update && apt-get install -y \

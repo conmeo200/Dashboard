@@ -43,6 +43,16 @@ services:
     container_name: laravel_redis
     ports:
       - "6379:6379"  # Mở cổng  
+    volumes:
+    - redis_data:/data
+    networks:
+      - laravel
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
     networks:
       - laravel
 
@@ -52,3 +62,5 @@ networks:
 
 volumes:
   mysql_data:
+  mongodb_data:
+  redis_data:

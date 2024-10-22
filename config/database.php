@@ -96,6 +96,16 @@ return [
             'driver'   => 'mongodb',
             'database' => 'school',
         ],
+
+        'mongodb123' => [
+            'driver'   => 'mongodb',
+            'host'     => env('DB_MONGODB_URI', 'mongodb'),
+            'port'     => env('DB_MONGODB_PORT', 27017),
+            'database' => env('DB_MONGODB_DATABASE', 'your_database_name'),
+            'username' => env('DB_MONGODB_USERNAME', ''),
+            'password' => env('DB_MONGODB_PASSWORD', ''),
+            'options'  => []
+        ],
     ],
 
     /*
