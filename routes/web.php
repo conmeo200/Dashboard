@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test-components', function () {
+    return view('pdf_view');
+});
+
 Route::get('/test-mysql', function () {
     $model = Product::query()->get()->toArray();
     dd($model);

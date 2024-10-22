@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>PDF Example</title>
+    <script src="{{URL::asset('js/BO/validateForm.js')}}"></script>
+    <script src="{{URL::asset('js/BO/jquery.min.js')}}"></script>
 </head>
 <style>
     .h1 {
@@ -13,7 +15,6 @@
     }
 </style>
 <body>
-<h1 class="container h1">{{ $title }}</h1>
-<p class="p">Date: {{ $date }}</p>
+@include('shared.componentBO.form')
 </body>
 </html>

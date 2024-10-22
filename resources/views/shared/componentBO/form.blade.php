@@ -75,6 +75,7 @@ $componentsForm = [
                 'id'          => 'slcActive',
                 'tag'         => 'input',
                 'type'        => 'checkbox',
+                'placeholder' => '',
                 'dataDefault' => '',
                 'option'      => [
                     'required'
@@ -150,16 +151,29 @@ $componentsForm = [
 
     switch ($attr['tag']) {
         case 'input':
-            echo "<input name='{$attr['name']}' id='{$attr['id']}' type='{$attr['type']}' placeholder='{$attr['placeholder']}' value='{$attr['dataDefault']}' {$options}>";
+            $checked = ($attr['type'] === 'checkbox' && !empty($attr['dataDefault'])) ? 'checked' : '';
+            echo "<input name='{$attr['name']}' id='{$attr['id']}' type='{$attr['type']}' placeholder='{$attr['placeholder']}' value='{$attr['dataDefault']}' {$options} {$checked}>";
+            echo "<span class='msg-{$attr['name']}'></span>";
             break;
+
         case 'textarea':
             echo "<textarea name='{$attr['name']}' id='{$attr['id']}' placeholder='{$attr['placeholder']}' {$options}>{$attr['dataDefault']}</textarea>";
+            echo "<span class='msg-{$attr['name']}'></span>";
             break;
         case 'select':
-            echo "<select name='{$attr['name']}' id='{$attr['id']}' {$options}><option value='1'>Select 1</option><option value='2'>Select 2</option></select>";
+            echo "<select name='{$attr['name']}' id='{$attr['id']}' {$options}>";
+
+            foreach ($attr['dataDefault'] as $val => $text) {
+                echo "<option value='{$val}'>{$text}</option>";
+            }
+
+            echo "</select>";
+            echo "<span class='msg-{$attr['name']}'></span>";
             break;
+
         case 'radio':
             echo "<input type='radio' name='{$attr['name']}' id='{$attr['id']}' {$options}>";
+            echo "<span class='msg-{$attr['name']}'></span>";
             break;
     }
     ?>
@@ -167,4 +181,47 @@ $componentsForm = [
     <?php endforeach;?>
     <button type="submit">Submit</button>
 </form>
+
+<script>
+    $(document).ready(function() {
+        // Khởi tạo mảng chứa thông tin các trường
+        const formFields = [
+                <?php foreach ($componentsForm['field'] as $key => $field) : ?>
+            {
+                id        : '<?= $field['attribute']['id'] ?>',
+                name      : '<?= $field['attribute']['name'] ?>',
+                className : '<?= $key ?>',
+                options   : <?= json_encode($field['attribute']['option']) ?>
+            },
+            <?php endforeach; ?>
+        ];
+        console.log(formFields);
+        const formValidator = FormValidator.getInstance();
+
+        // Kiểm tra toàn bộ các trường
+        $('#<?= $componentsForm['formID'] ?>').on('submit', function(event) {
+            event.preventDefault();
+            let isValid = true;
+
+            formFields.forEach(field => {
+                const $field = $('#' + field.id);
+                const $class = $('.' + field.name);
+
+                // Kiểm tra từng điều kiện trong `options`
+                if (field.options.includes('required')) {
+                    isValid &= formValidator.validateRequiredValue($field, $class, field.className);
+                }
+                if (field.options.includes('email')) {
+                    isValid &= formValidator.validateRequiredEmail($field, $class, field.className);
+                }
+
+                // Thêm các điều kiện kiểm tra khác nếu cần
+            });
+
+            if (isValid) {
+                this.submit(); // Nếu tất cả đều hợp lệ, submit form
+            }
+        });
+    });
+</script>
 
