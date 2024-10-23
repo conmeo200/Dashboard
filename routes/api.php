@@ -52,7 +52,12 @@ Route::prefix('/item')->group(function () {
     Route::delete('/{id}', [ItemController::class, 'destroy']);
 });
 
+//Auth
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot-password', [AuthController::class, 'forgotpassword']);
+//End Auth
+
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
