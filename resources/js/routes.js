@@ -9,6 +9,9 @@ import Form from "./components/Form/Form";
 import Products from "./components/Products/Products";
 import CreateProduct from "./components/Products/CreateProduct";
 import LeadForm from "./components/LeadForm/FormTest.vue";
+import Login from "./components/Auth/Login.vue";
+import Register from "./components/Auth/Register.vue";
+import Forgotpassword from "./components/Auth/Forgotpassword.vue";
 
 
 const routes = [
@@ -61,6 +64,21 @@ const routes = [
         name: 'LeadForm',
         path: '/leadform',
         component: LeadForm,
+    },
+    {
+        name: 'Login',
+        path: '/login',
+        component: Login,
+    },
+    {
+        name: 'Register',
+        path: '/register',
+        component: Register,
+    },
+    {
+        name: 'Forgotpassword',
+        path: '/forgot-password',
+        component: Forgotpassword,
     }
 ];
 
