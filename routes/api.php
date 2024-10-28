@@ -53,8 +53,9 @@ Route::prefix('/item')->group(function () {
 });
 
 //Auth
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'handleRegister']);
+Route::post('/login', [AuthController::class, 'handleLogin']);
+Route::post('/logout', [AuthController::class, 'handleLogout']);
 Route::post('/forgot-password', [AuthController::class, 'forgotpassword']);
 //End Auth
 

@@ -246,7 +246,7 @@ abstract class BaseRepository implements RepositoryInterface {
      */
     public function first(array $columns = ['*']) {
         $this->newQuery()->eagerLoad()->setClauses()->setScopes();
-dd($columns);
+
         $model = $this->query->firstOrFail($columns);
 
         $this->unsetClauses();

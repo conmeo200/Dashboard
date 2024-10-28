@@ -3,53 +3,121 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Repositories\User\UserResponse;
 use App\Service\TwilioService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
-class AuthController extends Controller
+class AuthController extends BaseApiController
 {
     protected $twilioService;
+    protected $userResponse;
 
-    public function __construct(TwilioService $twilioService)
+    public function __construct(TwilioService $twilioService, UserResponse $userResponse)
     {
         $this->twilioService = $twilioService;
+        $this->userResponse  = $userResponse;
     }
 
-    public function register(Request $request)
+    public function handleRegister(Request $request)
     {
-        $request->validate([
-            'email'        => 'required|email',
-            'phone'        => 'required',
-            'country_code' => 'required',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'name'     => ['required', 'min:6', 'max:255'],
+                'email'    => ['required', 'email', 'max:255'],
+                'password' => ['required', 'confirmed', 'min:6', 'max:255'],
+            ]);
 
-        $user = $this->twilioService->registerUser($request->email, $request->phone, $request->country_code);
-dd($user);
-        if ($user['success']) {
-            // Lưu Authy ID của người dùng vào cơ sở dữ liệu
-            // $request->user()->update(['authy_id' => $user['user']['id']]);
-            return response()->json(['message' => 'User registered with Authy', 'authy_id' => $user['user']['id']]);
-        } else {
-            return response()->json(['error' => $user['message']], 400);
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors()->toArray());
+            }
+
+              // Insert User
+
+            $insertUser = $this->userResponse->create($validator->validated());
+
+            if ($insertUser) {
+                 $token = $insertUser->createToken('authToken')->plainTextToken;
+
+                 return response()->json([
+                    'status_code'  => 200,
+                    'access_token' => $token,
+                    'token_type'   => 'Bearer',
+                    'data'         => $insertUser,
+                ]);
+            } else {
+                return response()->json([
+                    'status_code' => 500,
+                    'message'     => 'Error in Login',
+                ]);
+            }
+        } catch (\Exception $error) {
+            LogError('Register', $error->getMessage(), $error->getLine(), $error->getFile());
+
+            return response()->json([
+                'status_code' => 500,
+                'message'     => 'Error in Register',
+                'error'       => $error,
+            ]);
         }
     }
 
-    public function sendOtp(Request $request)
+    public function handleLogin(Request $request)
     {
-        $authyId  = $request->input('authy_id');
-        $response = $this->twilioService->sendToken($authyId);
-dd($response);
-        if ($response['success']) return response()->json(['message' => 'OTP sent']);
-        else return response()->json(['error' => $response['message']], 400);
+        try {
+            $validator = Validator::make($request->all(), [
+                'email'    => ['required', 'email'],
+                'password' => ['required', 'min:6', 'max:255'],
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors()->toArray());
+            }
+
+            $data = $validator->validated();
+
+            $login = Auth::attempt([
+                'email'    => $data['email'],
+                'password' => $data['password'],
+            ]);
+
+            if (!$login) {
+                return $this->sendError('Login Fail!', 422);
+            }
+
+            $user = $this->userResponse->findFirstUserByEmail($data['email']);
+
+            if (!$user) {
+                return $this->sendError('User Not Found', 422);
+            }
+
+            $token = $user->createToken('authToken')->plainTextToken;
+
+            return response()->json([
+               'status_code'  => 200,
+               'access_token' => $token,
+               'token_type'   => 'Bearer',
+               'data'         => $user,
+           ]);
+
+        } catch (\Exception $error) {
+            LogError('Login', $error->getMessage(), $error->getLine(), $error->getFile());
+
+            return response()->json([
+                'status_code' => 500,
+                'message'     => 'Error in Login',
+                'error'       => $error,
+            ]);
+        }
     }
 
-    public function verifyOtp(Request $request)
+    public function handleLogout(Request $request)
     {
-        $authyId  = $request->input('authy_id');
-        $token    = $request->input('token');
-        $response = $this->twilioService->verifyToken($authyId, $token);
+        $request->user()->currentAccessToken()->delete();
 
-        if ($response['success'])  return response()->json(['message' => 'OTP verified']);
-        else return response()->json(['error' => $response['message']], 400);
+        return $this->sendResponse(['message' => 'Logged out successfully']);
     }
 }
