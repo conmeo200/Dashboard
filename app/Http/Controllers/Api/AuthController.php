@@ -28,7 +28,7 @@ class AuthController extends BaseApiController
             $validator = Validator::make($request->all(), [
                 'name'     => ['required', 'min:6', 'max:255'],
                 'email'    => ['required', 'email', 'max:255'],
-                'password' => ['required', 'confirmed', 'min:6', 'max:255'],
+                'password' => ['required', 'min:6', 'max:255']
             ]);
 
             if ($validator->fails()) {
@@ -60,7 +60,7 @@ class AuthController extends BaseApiController
             return response()->json([
                 'status_code' => 500,
                 'message'     => 'Error in Register',
-                'error'       => $error,
+                'error'       => $$error->getMessage(),
             ]);
         }
     }
