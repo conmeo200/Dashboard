@@ -90,22 +90,18 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
-
         'mongodb' => [
-            'dsn'      => env('DB_MONGODB_URI'), // uses the value of the DB_URI environment variable
-            'driver'   => 'mongodb',
-            'database' => 'school',
+            'driver' => 'mongodb',
+            'host' => env('MONGODB_HOST', '127.0.0.1'),
+            'port' => env('MONGODB_PORT', 27017),
+            'database' => env('MONGODB_DATABASE'),
+            'username' => env('MONGODB_USERNAME'),
+            'password' => env('MONGODB_PASSWORD'),
+            'options' => [
+                'database' => env('MONGODB_DATABASE'), // Tên database để xác thực
+            ],
         ],
-
-        'mongodb123' => [
-            'driver'   => 'mongodb',
-            'host'     => env('DB_MONGODB_URI', 'mongodb'),
-            'port'     => env('DB_MONGODB_PORT', 27017),
-            'database' => env('DB_MONGODB_DATABASE', 'your_database_name'),
-            'username' => env('DB_MONGODB_USERNAME', ''),
-            'password' => env('DB_MONGODB_PASSWORD', ''),
-            'options'  => []
-        ],
+        
     ],
 
     /*

@@ -51,7 +51,8 @@
         methods: {
             async fetchRoles(page = 1) {
                 try {
-                    const response      = await axios.get(`http://dashboard.test/api/roles?page=${page}`);
+                    let response      = await axios.get(`${this.url_api}/role?page=${page}`);
+                    console.log(response);
                     this.roles          = response.data.data; // Dữ liệu danh sách các roles
                     this.paginationData = response.data.pagination; // Dữ liệu phân trang
                 } catch (error) {

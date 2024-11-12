@@ -49,6 +49,7 @@ services:
       - laravel
   mongodb:
     image: mongo:latest
+    container_name: laravel_mongodb
     ports:
       - "27017:27017"
     volumes:

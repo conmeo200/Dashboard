@@ -7,7 +7,7 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 class LogActivity extends Eloquent
 {
     protected $connection = 'mongodb';
-    protected $collection = 'respone';
+    protected $collection = 'logs';
     protected $fillable   = ['name', 'email'];
     private static $instance = [];
 

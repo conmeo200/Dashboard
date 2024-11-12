@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\MongoDB\LogActivity;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -28,16 +29,17 @@ Route::get('/test-mysql', function () {
 
 Route::get('/test-redis', function () {
     $redis = Redis::connection();
+    dd($redis);
     $redis->set('test', 'Hello Redis');
     return $redis->get('test');
 });
 
-// Route::get('/test-mongodb', function () {
-//     $collection = DB::connection('mongodb')->collection('test');
-//     $collection->insert(['name' => 'Test MongoDB']);
-//     $document = $collection->where('name', 'Test MongoDB')->first();
-//     return response()->json($document);
-// });
+Route::get('/test-mongodb', function () {
+    $collection = LogActivity::get();
+    // $collection->insert(['name' => 'Test MongoDB']);
+    // $document = $collection->where('name', 'Test MongoDB')->first();
+    return response()->json($collection);
+});
 
 Route::get('{any}', function () {
     return view('welcome');
