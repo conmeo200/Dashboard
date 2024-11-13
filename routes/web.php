@@ -3,6 +3,8 @@
 use App\Models\MongoDB\LogActivity;
 use App\Models\Order;
 use App\Models\Product;
+use App\Repositories\LogsRepositories\Logs;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
@@ -35,10 +37,13 @@ Route::get('/test-redis', function () {
 });
 
 Route::get('/test-mongodb', function () {
-    $collection = LogActivity::get();
-    // $collection->insert(['name' => 'Test MongoDB']);
+    //$collection = LogActivity::get();
+    $logs = new Logs();
+    $logs1 = new LogActivity();
+    $result = $logs->insert(['name' => 'Test MongoDB5', 'timestamp' => Carbon::now()->timestamp]);
+    //$result = $logs1->insert(['name' => 'Test MongoDB4', 'timestamp' => Carbon::now()->timestamp]);
     // $document = $collection->where('name', 'Test MongoDB')->first();
-    return response()->json($collection);
+    return response()->json($logs->getAllLogs());
 });
 
 Route::get('{any}', function () {

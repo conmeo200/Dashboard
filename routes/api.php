@@ -22,19 +22,11 @@ use App\Http\Controllers\Api\RoleController;
 |
 */
 
-
+//Api Menu
 Route::get('/list-menu', [MenuController::class, 'listMenu'])->name('listMenu');
+//End Api Menu
 
-Route::get('/register', [UserController::class, 'register'])->name('register');
-Route::get('/download-pdf', [MenuController::class, 'downloadPDF']);
-Route::get('/article', [ArticleController::class, 'index']);
-Route::get('/article/{id}', [ArticleController::class, 'articleDetail']);
-
-Route::get('clear-cache', [ArticleController::class, 'clearAllCache']);
-Route::get('delete-cache/{key}', [ArticleController::class, 'delKeyCache']);
-Route::post('lead-form', [LeadformController::class, 'create']);
-
-
+//Api Products 
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductsController::class, 'index']);
     Route::get('/{id}', [ProductsController::class, 'detail']);
@@ -42,7 +34,7 @@ Route::prefix('products')->group(function () {
     Route::post('/{id}', [ProductsController::class, 'handleEdit']);
     Route::delete('/{id}', [ProductsController::class, 'handleDelete']);
 });
-
+//End Api Products
 
 Route::get('/items', [ItemController::class, 'index']);
 Route::prefix('/item')->group(function () {
@@ -59,13 +51,12 @@ Route::post('/logout', [AuthController::class, 'handleLogout']);
 Route::post('/forgot-password', [AuthController::class, 'forgotpassword']);
 //End Auth
 
-Route::post('/send-otp', [AuthController::class, 'sendOtp']);
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
-
+//Role 
 Route::prefix('roles')->group(function () {
     Route::get('/', [RoleController::class, 'getList']);
     Route::get('{id}', [RoleController::class, 'detail']);
 });
+//End Role 
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();

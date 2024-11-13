@@ -14,9 +14,9 @@ class ProductsRepository extends BaseRepository implements ProductsInterface
     public function create123(array $data) {
         return DB::transaction(function () use ($data) {
             $user = parent::create([
-                'customerNumber' => $data['customerNumber'],
-                'customerName' => $data['customerName'],
-                'contactLastName' => $data['contactLastName'],
+                'customerNumber'   => $data['customerNumber'],
+                'customerName'     => $data['customerName'],
+                'contactLastName'  => $data['contactLastName'],
                 'contactFirstName' => $data['contactFirstName'],
             ]);
             return $user;

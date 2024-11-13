@@ -132,6 +132,16 @@ abstract class BaseRepository implements RepositoryInterface {
     }
 
     /**
+     * Create
+     * @param array $attributes
+     * @return mixed
+     */
+    public function insert(array $attributes) {
+
+        return $this->model->insert($attributes);
+    }
+
+    /**
      * Update
      * @param $id
      * @param array $attributes
