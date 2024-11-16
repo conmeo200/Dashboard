@@ -8,7 +8,7 @@
         <!-- Material Icons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     </head>
-    <style>
+    {{-- <style>
         h2 {
     font-size: 26px;
     color: #333;
@@ -95,8 +95,9 @@
       font-size: 14px;
     }
   }
-    </style>
+    </style> --}}
     <body>
+      <h1>44444</h1>
             <div id="app"></div>
     </body>
     <script src="{{ mix('/js/app.js') }}"></script>

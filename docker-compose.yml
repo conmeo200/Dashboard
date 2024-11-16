@@ -7,6 +7,7 @@ services:
     container_name: laravel_app
     volumes:
       - .:/var/www/html
+      - /var/www/html/node_modules # Tạo volume riêng cho node_modules
     networks:
       - laravel
 
@@ -47,6 +48,19 @@ services:
     - redis_data:/data
     networks:
       - laravel
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: redis_insight
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_HOST=redis  # Đảm bảo RedisInsight biết Redis container nào để kết nối
+    depends_on:
+      - redis  # RedisInsight sẽ khởi động sau Redis
+    networks:
+      - laravel
+
   mongodb:
     image: mongo:latest
     container_name: laravel_mongodb

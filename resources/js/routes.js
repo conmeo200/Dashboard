@@ -1,13 +1,13 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import Dashboard from "./components/Dashboard/Dashboard";
-import User from "./components/User/User";
-import Role from "./components/Role/Role";
-import Log from "./components/Log/Log";
-import Notifications from "./components/Notification/Notifications";
-import Form from "./components/Form/Form";
-import Products from "./components/Products/Products";
-import CreateProduct from "./components/Products/CreateProduct";
+import Dashboard from "./components/Dashboard/Dashboard.vue";
+import User from "./components/User/User.vue";
+import Role from "./components/Role/Role.vue";
+import Log from "./components/Log/Log.vue";
+import Notifications from "./components/Notification/Notifications.vue";
+import Form from "./components/Form/Form.vue";
+import Products from "./components/Products/Products.vue";
+import CreateProduct from "./components/Products/CreateProduct.vue";
 import LeadForm from "./components/LeadForm/FormTest.vue";
 import Login from "./components/Auth/Login.vue";
 import Register from "./components/Auth/Register.vue";

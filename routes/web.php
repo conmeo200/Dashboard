@@ -31,9 +31,8 @@ Route::get('/test-mysql', function () {
 
 Route::get('/test-redis', function () {
     $redis = Redis::connection();
-    dd($redis);
-    $redis->set('test', 'Hello Redis');
-    return $redis->get('test');
+    $redis->set('test1', 'Hello Redis');
+    return $redis->get('test1');
 });
 
 Route::get('/test-mongodb', function () {

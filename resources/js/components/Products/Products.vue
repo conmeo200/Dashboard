@@ -7,7 +7,7 @@
         <table class="table table-striped table-hover shadow-sm">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">ID9999</th>
                 <th scope="col">Name</th>
                 <th scope="col">Type</th>
                 <th scope="col">Price</th>
@@ -111,7 +111,7 @@
                 }
             },
             handleDelete(id) {
-                let url = 'http://Dashboard.test/api/delete/';
+                let url = this.url_api +  '/delete/';
                 try {
                     axios
                         .delete(url + id)
@@ -128,7 +128,8 @@
                 }
             },
             View(id) {
-                let url = 'http://Dashboard.test/api/product/';
+                let url = this.url_api + '/products/';
+            console.log(url);
                 this.showModal      = true;
                 try {
                     axios
