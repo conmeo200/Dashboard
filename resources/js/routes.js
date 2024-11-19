@@ -12,9 +12,24 @@ import LeadForm from "./components/LeadForm/FormTest.vue";
 import Login from "./components/Auth/Login.vue";
 import Register from "./components/Auth/Register.vue";
 import Forgotpassword from "./components/Auth/Forgotpassword.vue";
+import Hooks from "./components/Generate/Hooks.vue";
+
+// url pages
+import home from "./components/Page/home";
+import tags from "./components/Page/tags";
 
 
 const routes = [
+    {
+        name: 'home',
+        path: '/',
+        component: home
+    },
+    {
+        name: 'tags',
+        path: '/tags',
+        component: tags
+    },
     {
         name: 'Dashboard',
         path: '/dashboard',
@@ -79,6 +94,13 @@ const routes = [
         name: 'Forgotpassword',
         path: '/forgot-password',
         component: Forgotpassword,
+    },
+
+    // hooks vue
+    {
+        name: 'hooks',
+        path: '/hooks',
+        component: Hooks,
     }
 ];
 

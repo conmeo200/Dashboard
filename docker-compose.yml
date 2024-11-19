@@ -7,7 +7,6 @@ services:
     container_name: laravel_app
     volumes:
       - .:/var/www/html
-      - /var/www/html/node_modules # Tạo volume riêng cho node_modules
     networks:
       - laravel
 
