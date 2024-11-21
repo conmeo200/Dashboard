@@ -9,7 +9,8 @@ class Blog extends Model
 {
     use HasFactory;
 
-    protected $table = 'blogs';
+    protected $table      = 'blogs';
+    public    $timestamps = false;
 
     protected $fillable = [
         'id',

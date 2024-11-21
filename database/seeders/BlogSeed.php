@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Subdomain;
+use App\Models\Blog;
 use Illuminate\Database\Seeder;
 
-class SubdomainSeeder extends Seeder
+class BlogSeed extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class SubdomainSeeder extends Seeder
      */
     public function run()
     {
-        Subdomain::factory(10)->create();
+        Blog::factory(20)->count(10)->create();
     }
 }

@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SubdomainFactory extends Factory
+class CategoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,9 +15,9 @@ class SubdomainFactory extends Factory
     public function definition()
     {
         return [
-            'name'   => $this->faker->name(),
-            'link'   => $this->faker->url(),
-            'active' => $this->faker->randomElement(['Y', 'N']),
+            'name'         => $this->faker->word,
+            'created_time' => Carbon::now()->timestamp,
+            'updated_time' => Carbon::now()->timestamp,
         ];
     }
 }

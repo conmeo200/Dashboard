@@ -9,9 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $table = 'categories';
-
-    protected $fillable = ['id', 'name', 'isActive', 'created_time', 'updated_time'];
+    protected $table      = 'categories';
+    public    $timestamps = false;
+    protected $fillable   = ['id', 'name', 'isActive', 'created_time', 'updated_time'];
 
     public function blogs() {
         return $this->belongsToMany(Blog::class, 'blog_category', 'blog_id', 'category_id', 'id', 'id');

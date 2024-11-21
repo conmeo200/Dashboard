@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
 
-class ProductSeeder extends Seeder
+class TagSeed extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        Product::factory(1000)->create();
+        Tag::factory()->count(10)->create();
     }
 }

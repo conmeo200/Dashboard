@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TypeProductFactory extends Factory
+class TagFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,10 +15,9 @@ class TypeProductFactory extends Factory
     public function definition()
     {
         return [
-            'name'    => $this->faker->name(),
-            'keyword' => $this->faker->imageUrl(),
-            'order'   => 1,
-            'active'  => $this->faker->randomElement(['Y', 'N']),
+            'name'         => $this->faker->word,
+            'created_time' => Carbon::now()->timestamp,
+            'updated_time' => Carbon::now()->timestamp,
         ];
     }
 }
