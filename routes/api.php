@@ -1,15 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\MenuController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\ProductsController;
-use App\Http\Controllers\Api\ArticleController;
-use App\Http\Controllers\Api\Leadform\LeadformController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\TagsController;
+use App\Http\Controllers\Api\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +15,19 @@ use App\Http\Controllers\Api\RoleController;
 |
 */
 
+Route::group(['prefix' => 'tag'], function () {
+    Route::get('/', [TagsController::class, 'index']);
+    Route::post('/create', [TagsController::class, 'create']);
+    Route::get('/{id}', [TagsController::class, 'detail']);
+    Route::post('/{id}', [TagsController::class, 'update']);
+    Route::delete('/{id}', [TagsController::class, 'delete']);
+});
 
+
+Route::group(['prefix' => 'blog'], function () {
+    Route::get('/', [BlogController::class, 'index']);
+    Route::post('/create', [BlogController::class, 'create']);
+    Route::get('/{id}', [BlogController::class, 'detail']);
+    Route::post('/{id}', [BlogController::class, 'update']);
+    Route::delete('/{id}', [BlogController::class, 'delete']);
+});
