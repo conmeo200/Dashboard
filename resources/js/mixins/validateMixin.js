@@ -5,6 +5,11 @@ export default {
         };
     },
     methods: {
+        validateParam(value) {
+            if (!value) return this.error('Data Invalid');
+
+            return true;
+        },
         validateValue(name, value) {
             if (!value) return this.error('Field ' + name + ' is required!');
 
