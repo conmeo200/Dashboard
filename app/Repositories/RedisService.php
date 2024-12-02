@@ -1,6 +1,7 @@
 <?php 
 namespace App\Repositories;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class RedisService 
@@ -11,6 +12,49 @@ class RedisService
     {
         $this->redis = Redis::connection();
     }
+
+    public function list($key, $data = [])
+    {
+        if (empty($data) && empty($key)) return false;
+
+        $cachedData = $this->redis->lrange($key, 0, -1);
+        
+        if (!empty($cachedData)) {
+            return array_map(function ($item) {
+                return json_decode($item, true);
+            }, $cachedData);
+        }
+        
+        foreach ($data as $item) {
+            $this->redis->lpush($key, json_encode($item));
+        }
+
+        return $this->redis->lrange($key, 0, -1); 
+    }
+
+    public function create($key, $item) 
+    {
+        try {
+            if (empty($key) || empty($item)) return false;
+
+            $cachedData = $this->redis->lrange($key, 0, -1);
+
+            if (empty($cachedData)) return [];
+
+            $result = $this->redis->lpush($key, json_encode($item));
+
+            if (!$result) {
+                Log::error("Error when pushing Data {$item} to KEY {$key}");
+            }
+
+            return $this->redis->lrange($key, 0, -1);
+        } catch (\Exception $e) {
+            Log::error('Error when pushing data to Redis: ' . $e->getMessage());
+
+            return false;
+        }
+    }
+
     /**
      * Set giá trị cho key với thời gian hết hạn (tùy chọn).
      */

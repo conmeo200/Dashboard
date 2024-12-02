@@ -18,8 +18,8 @@ class TagsController extends BaseApiController
     }
 
     public function index(Request $request) 
-    {
-        return $this->sendPaginationResponse($this->tagRsp->getAllTags($request->all()));
+    {        
+        return $this->sendPaginationArrayResponse($this->tagRsp->getAllTags($request->all()));
     }
 
     public function create(Request $request) 
@@ -43,7 +43,7 @@ class TagsController extends BaseApiController
 
             if (!$insertItem) return $this->sendError('Insert Item Fail !');
 
-            return $this->sendResponse([], 'Insert Item Success');
+            return $this->sendPaginationArrayResponse($insertItem, 'Insert Item Success');
         } catch (\Exception $e) {
             Log::error("Api Create Item Error Messages: {$e->getMessage()}");
 

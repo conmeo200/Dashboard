@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Exceptions\GeneralException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 abstract class BaseRepository implements RepositoryInterface {
 
@@ -129,6 +130,28 @@ abstract class BaseRepository implements RepositoryInterface {
     public function create(array $attributes) {
 
         return $this->model->create($attributes);
+    }
+
+    /**
+     * Create
+     * @param array $attributes
+     * @return mixed
+     */
+    public function insertGetRecord(array $attributes) {
+
+        DB::beginTransaction();
+
+        $id =  $this->model->insertGetId($attributes);
+
+        if (empty($id)) {
+
+            DB::rollBack();
+            return false;
+        }
+
+        DB::commit();
+
+        return $this->find($id)->toArray();
     }
 
     /**

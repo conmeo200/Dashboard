@@ -29,23 +29,22 @@
 								</tr>
 
 								<template v-else>
-									<tr  v-for="(tag, i) in tags" :key="i">
-									<td>{{ tag.id }}</td>
-									<td class="">{{ tag.name }}</td>
-									<td>
-										<Button :type="tag.isActive === 'Y' ? 'success' : 'error'">{{ tag.isActive }}</Button>
-									</td>
-									<td>{{ tag.created_time_format }}</td>
-									<td>{{ tag.updated_time_format }}</td>
-									<td>
-										<button class="_btn _action_btn view_btn1" type="button" @click="detail(tag.id)">View</button>
-										<button class="_btn _action_btn make_btn1" type="button" @click="deleteTag(tag.id)">Delete</button>
-									</td>
-								</tr>
-
-								<tr v-if="!tags.length">
-									<td colspan="6" class="text-center">No Result</td>
-								</tr>
+									<tr v-if="!tags">
+										<td colspan="6" class="text-center">No Result</td>
+									</tr>
+									<tr v-else v-for="(tag, i) in tags" :key="i">
+										<td>{{ tag.id }}</td>
+										<td class="">{{ tag.name }}</td>
+										<td>
+											<Button :type="tag.isActive === 'Y' ? 'success' : 'error'">{{ tag.isActive }}</Button>
+										</td>
+										<td>{{ tag.created_time_format }}</td>
+										<td>{{ tag.updated_time_format }}</td>
+										<td>
+											<button class="_btn _action_btn view_btn1" type="button" @click="detail(tag.id)">View</button>
+											<button class="_btn _action_btn make_btn1" type="button" @click="deleteTag(tag.id)">Delete</button>
+										</td>
+									</tr>
 								</template>
 
 									<!-- ITEMS -->
@@ -91,14 +90,17 @@
 
 					</Modal>
 					<!-- tag editing modal -->
-					<Page :total="100" />
-
+					<Paginate :pagination="pagination" @page-changed="getAll"/>
 				</div>
 			</div>
 		</div>
 	</template>
 	<script>
-		export default {
+
+	import Paginate from '../Generate/Paginate.vue';
+
+	export default {
+		components: {Paginate},
 			data() {
 				return {
 					addModal: false,
@@ -110,13 +112,15 @@
 					isAdding  : false,
 					tags      : [],
 					isLoading : false,
-					isDisabled: false
+					isDisabled: false,
+					pagination: [],
+					page:1
 				}
 			},
 			mounted() {
 				this.getAll();
 			},
-			methods: {
+		methods: {
 				// Close Modal
 				closeModal() {
 					this.addModal       = false;
@@ -135,8 +139,9 @@
 						const rsp = await this.callApi('post', 'api/tag/create', this.data);
 
 						if (rsp.success) {
-							this.addModal = false;
-							await this.getAll(); 
+							this.addModal = false;		
+							this.tags 		= rsp.data || [];							
+							this.pagination = rsp.pagination;				
 							this.success(rsp.message);
 						} else {
 							this.error(rsp.data.message);
@@ -207,15 +212,16 @@
 				},
 
 				// Get All Item
-				async getAll() {
+				async getAll(page = 1) {
 					try {
 						this.isLoading = true;
-						const rsp = await this.callApi('get', 'api/tag/');
+						const rsp = await this.callApi('get', `api/tag?page=${page}`);
 
 						if (rsp.success) {
-						this.tags = rsp.data || [];
+							this.tags 		= rsp.data || [];							
+							this.pagination = rsp.pagination;
 						} else {
-						this.error(rsp.data.message || 'Failed to fetch tags.');
+							this.error(rsp.data.message || 'Failed to fetch tags.');
 						} 
 					} catch (error) {
 						this.error('Unable to fetch tags. Please check the server.');

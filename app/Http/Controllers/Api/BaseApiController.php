@@ -95,7 +95,7 @@ class BaseApiController extends Controller
     public function sendPaginationArrayResponse($result, $message = '')
     {
         $paged   = request()->get('page', 1);
-        $perPage = request()->get('per_page', config('generate.per_page_default'));
+        $perPage = request()->get('per_page', 10);
 
         if (!is_numeric($paged)) $paged = 1;
         if (!is_numeric($perPage)) $perPage = config('generate.per_page_default');
