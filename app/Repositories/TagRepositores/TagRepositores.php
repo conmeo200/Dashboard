@@ -27,12 +27,8 @@ class TagRepositores extends BaseRepository
         if ($redisService->exists(self::KEY_LIST)) {
             $listModel = $redisService->list(self::KEY_LIST);
 
-        } else {
-            //$listModel  = parent::orderBy('created_time', 'desc')->get()->toArray();
-            $listModel  = parent::get()->toArray();
-
-           
-            $redisService->list(self::KEY_LIST, $listModel);
+        } else {        
+            $listModel = $redisService->list(self::KEY_LIST, parent::get()->toArray());
         }
 
         return $listModel;
@@ -41,6 +37,7 @@ class TagRepositores extends BaseRepository
     public function insertItem($item) 
     {
         $redisService = new RedisService();
+
         $item['created_time'] = Carbon::now()->timestamp;
         $item['updated_time'] = Carbon::now()->timestamp;
 
@@ -80,9 +77,33 @@ class TagRepositores extends BaseRepository
 
     public function updateItemByID($id, $data) 
     {
+        DB::beginTransaction();
+        $redisService = new RedisService();
+
         $data['updated_time'] = Carbon::now()->timestamp;
+
         try {
-            return parent::updateById($id, $data);
+            $update = parent::updateById($id, $data);
+
+            if (!$update) {
+                Log::error("Update Fail Tag Item ID : {$id}");
+
+                DB::rollBack();
+                return false;        
+            }
+
+            $updateCache = $redisService->update(self::KEY_LIST, $id, $data);
+
+            if (empty($updateCache)) {
+                Log::error("Update Fail Tag Item ID : {$id} In Cache");
+
+                DB::rollBack();
+                
+                return false;
+            }
+        
+            DB::commit();
+            return $updateCache;
         } catch (\Exception $e) {
             Log::error("Update Tag Item ID : {$id} Error Messages: {$e->getMessage()}");
 
@@ -92,8 +113,31 @@ class TagRepositores extends BaseRepository
 
     public function deleteItemByID($id) 
     {
+        DB::beginTransaction();
+        $redisService = new RedisService();
+
         try {
-            return parent::deleteById($id);
+            $delete = parent::deleteById($id);
+
+            if (!$delete) {
+                Log::error("Delete Fail Tag Item ID : {$id}");
+
+                DB::rollBack();
+                return false;        
+            }
+
+            $deleteCache = $redisService->delete(self::KEY_LIST, $id);
+
+            if (empty($deleteCache)) {
+                Log::error("Delete Fail Tag Item ID : {$id} In Cache");
+
+                DB::rollBack();
+                
+                return false;
+            }
+
+            DB::commit();
+            return $deleteCache;
         } catch (\Exception $e) {
             Log::error("Delete Tag Item ID : {$id} Error Messages: {$e->getMessage()}");
 

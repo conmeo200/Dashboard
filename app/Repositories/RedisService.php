@@ -24,12 +24,14 @@ class RedisService
                 return json_decode($item, true);
             }, $cachedData);
         }
-        
+
         foreach ($data as $item) {
             $this->redis->lpush($key, json_encode($item));
         }
 
-        return $this->redis->lrange($key, 0, -1); 
+        return array_map(function ($item) {
+            return json_decode($item, true);
+        }, $this->redis->lrange($key, 0, -1));
     }
 
     public function create($key, $item) 
@@ -44,10 +46,94 @@ class RedisService
             $result = $this->redis->lpush($key, json_encode($item));
 
             if (!$result) {
-                Log::error("Error when pushing Data {$item} to KEY {$key}");
+                Log::error("Error when pushing data {$item} to KEY {$key}");
+
+                return [];
             }
 
             return $this->redis->lrange($key, 0, -1);
+        } catch (\Exception $e) {
+            Log::error('Error when pushing data to Redis: ' . $e->getMessage());
+
+            return false;
+        }
+    }
+
+    public function update($key, $id, $item) 
+    {
+        try {
+            if (empty($key) || empty($item)) return false;
+
+            $cachedData = $this->redis->lrange($key, 0, -1);
+
+            if (empty($cachedData)) return false;
+
+            $dataFormat = array_map(function ($item) {
+                return json_decode($item, true);
+            }, $cachedData);
+
+            // $getItemCache = findFirstValueArray($dataFormat, 'id', $id);
+
+            if (empty($dataFormat)) {
+                return false;
+            }
+
+            foreach($dataFormat as $key => $value) {
+                if ($value['id'] == $id) {
+                    $value['name']         = $item['name'];
+                    $value['isActive']     = $item['isActive'];
+                    $value['updated_time'] = $item['updated_time'];
+
+                    $dataFormat[$key] = $value;
+                    break;
+                }
+            }
+
+            $this->redis->del($key);
+
+            foreach ($dataFormat as $item) {
+                $this->redis->lpush($key, json_encode($item));
+            }
+
+            return $dataFormat;
+        } catch (\Exception $e) {
+            Log::error('Error when pushing data to Redis: ' . $e->getMessage());
+
+            return false;
+        }
+    }
+
+    public function delete($key, $id) 
+    {
+        try {
+            if (empty($key) || empty($id)) return false;
+
+            $cachedData = $this->redis->lrange($key, 0, -1);
+
+            if (empty($cachedData)) return false;
+
+            $dataFormat = array_map(function ($item) {
+                return json_decode($item, true);
+            }, $cachedData);            
+
+            if (empty($dataFormat)) {
+                return false;
+            }
+
+            foreach($dataFormat as $key => $value) {
+                if ($value['id'] == $id) {
+                    unset($dataFormat[$key]);
+                    break;
+                }
+            }
+
+            $this->redis->del($key);
+
+            foreach ($dataFormat as $item) {
+                $this->redis->lpush($key, json_encode($item));
+            }
+
+            return $dataFormat;
         } catch (\Exception $e) {
             Log::error('Error when pushing data to Redis: ' . $e->getMessage());
 

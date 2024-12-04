@@ -95,7 +95,7 @@ class TagsController extends BaseApiController
 
             if (!$updateItem) return $this->sendError('Update Item Fail !');
 
-            return $this->sendResponse($updateItem, 'Update Item Success!');
+            return $this->sendPaginationArrayResponse($updateItem, 'Update Item Success!');
         } catch (\Exception $e) {
             Log::error("Api Update Item Error Messages: {$e->getMessage()}");
 
@@ -116,7 +116,7 @@ class TagsController extends BaseApiController
 
             if (!$deleteItem) return $this->sendError('Delete Item Fail !');
 
-            return $this->sendResponse([], 'Delete Item Success!');
+            return $this->sendPaginationArrayResponse($deleteItem, 'Delete Item Success!');
         } catch (\Exception $e) {
             Log::error("Api Delete Item Error Messages: {$e->getMessage()}");
 

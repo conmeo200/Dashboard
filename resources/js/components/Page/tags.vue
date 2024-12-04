@@ -168,8 +168,10 @@
 							const rsp = await this.callApi('post', 'api/tag/' + id, this.data);
 
 							if (rsp.success) {
-								await this.getAll(); 
-								this.data.is_active = rsp.data.isActive;																						
+								this.tags       = rsp.data || [];
+								this.pagination = rsp.pagination;
+								this.isLoading  = false;
+								
 								this.success(rsp.message);
 							} else {
 								this.error(rsp.data.message);
@@ -195,7 +197,9 @@
 							const rsp = await this.callApi('delete', 'api/tag/' + id);
 
 							if (rsp.success) {
-								await this.getAll(); 																												
+								this.tags       = rsp.data || [];
+								this.pagination = rsp.pagination;	
+																																			
 								this.success(rsp.message);
 							} else {
 								this.error(rsp.data.message);
