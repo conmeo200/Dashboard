@@ -29,7 +29,9 @@
             </li>
 
             <!-- Nút cuối cùng -->
-            <li :class="{'active': pagination.last_page === pagination.current_page}">
+            <li 
+                v-if="pagination.last_page != 1"
+                :class="{'active': pagination.last_page === pagination.current_page}">
                 <a href="#" @click.prevent="changePage(pagination.last_page)">{{ pagination.last_page }}</a>
             </li>
 

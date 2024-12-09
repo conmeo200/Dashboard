@@ -100,7 +100,7 @@
 	import Paginate from '../Generate/Paginate.vue';
 
 	export default {
-		components: {Paginate},
+			components: {Paginate},
 			data() {
 				return {
 					addModal: false,
@@ -120,137 +120,136 @@
 			mounted() {
 				this.getAll();
 			},
-		methods: {
-				// Close Modal
-				closeModal() {
-					this.addModal       = false;
-					this.data.tag_name  = '';
-					this.data.is_active = 'Y';
-				},
-				// Add Item			
-				async addTag() {
-					
-					this.isLoading      = true;
-					let validateInputTagName  = this.validateValue('Tag Name', this.data.tag_name);
-					let validateRadioisActive = this.validateValue('isActive', this.data.is_active);
+			methods: {
+					// Close Modal
+					closeModal() {
+						this.addModal       = false;
+						this.data.tag_name  = '';
+						this.data.is_active = 'Y';
+					},
+					// Add Item			
+					async addTag() {						
+						this.isLoading      = true;
+						let validateInputTagName  = this.validateValue('Tag Name', this.data.tag_name);
+						let validateRadioisActive = this.validateValue('isActive', this.data.is_active);
 
-					if (validateInputTagName && validateRadioisActive) {
-						try {
-						const rsp = await this.callApi('post', 'api/tag/create', this.data);
+						if (validateInputTagName && validateRadioisActive) {
+							try {
+							const rsp = await this.callApi('post', 'api/tag/create', this.data);
 
-						if (rsp.success) {
-							this.addModal = false;		
-							this.tags 		= rsp.data || [];							
-							this.pagination = rsp.pagination;				
-							this.success(rsp.message);
+							if (rsp.success) {
+								this.addModal = false;		
+								this.tags 		= rsp.data || [];							
+								this.pagination = rsp.pagination;				
+								this.success(rsp.message);
+							} else {
+								this.error(rsp.data.message);
+							}
+							} catch (error) {
+							console.error("API Error:", error);
+							this.error("Something went wrong!");
+							} finally {
+							this.isLoading = false;
+							}
 						} else {
-							this.error(rsp.data.message);
-						}
-						} catch (error) {
-						console.error("API Error:", error);
-						this.error("Something went wrong!");
-						} finally {
-						this.isLoading = false;
-						}
-					} else {
-						this.isLoading = false;
-					}
-				},
-
-				// Update Item			
-				async updateTag(id) {
-					this.isLoading        	  = true;
-					let validateID            = this.validateParam(id);					
-					let validateRadioisActive = this.validateValue('isActive', this.data.is_active);
-
-					if (validateRadioisActive && validateID) {
-						try {
-							const rsp = await this.callApi('post', 'api/tag/' + id, this.data);
-
-							if (rsp.success) {
-								this.tags       = rsp.data || [];
-								this.pagination = rsp.pagination;
-								this.isLoading  = false;
-								
-								this.success(rsp.message);
-							} else {
-								this.error(rsp.data.message);
-							}
-						} catch (error) {
-							console.error("API Error:", error);
-							this.error("Something went wrong!");
-						} finally {
 							this.isLoading = false;
 						}
-					} else {
-						this.isLoading = false;
-					}
-				},
+					},
 
-				// Delete Item			
-				async deleteTag(id) {
-					this.isLoading = true;
-					let validateID = this.validateParam(id);
+					// Update Item			
+					async updateTag(id) {
+						this.isLoading        	  = true;
+						let validateID            = this.validateParam(id);					
+						let validateRadioisActive = this.validateValue('isActive', this.data.is_active);
 
-					if (validateID) {
-						try {
-							const rsp = await this.callApi('delete', 'api/tag/' + id);
+						if (validateRadioisActive && validateID) {
+							try {
+								const rsp = await this.callApi('post', 'api/tag/' + id, this.data);
 
-							if (rsp.success) {
-								this.tags       = rsp.data || [];
-								this.pagination = rsp.pagination;	
-																																			
-								this.success(rsp.message);
-							} else {
-								this.error(rsp.data.message);
+								if (rsp.success) {
+									this.tags       = rsp.data || [];
+									this.pagination = rsp.pagination;
+									this.isLoading  = false;
+									
+									this.success(rsp.message);
+								} else {
+									this.error(rsp.data.message);
+								}
+							} catch (error) {
+								console.error("API Error:", error);
+								this.error("Something went wrong!");
+							} finally {
+								this.isLoading = false;
 							}
-						} catch (error) {
-							console.error("API Error:", error);
-							this.error("Something went wrong!");
-						} finally {
+						} else {
 							this.isLoading = false;
 						}
-					} else {
-						this.isLoading = false;
-					}
-				},
+					},
 
-				// Get All Item
-				async getAll(page = 1) {
-					try {
+					// Delete Item			
+					async deleteTag(id) {
 						this.isLoading = true;
-						const rsp = await this.callApi('get', `api/tag?page=${page}`);
+						let validateID = this.validateParam(id);
 
-						if (rsp.success) {
-							this.tags 		= rsp.data || [];							
-							this.pagination = rsp.pagination;
+						if (validateID) {
+							try {
+								const rsp = await this.callApi('delete', 'api/tag/' + id);
+
+								if (rsp.success) {
+									this.tags       = rsp.data || [];
+									this.pagination = rsp.pagination;	
+																																				
+									this.success(rsp.message);
+								} else {
+									this.error(rsp.data.message);
+								}
+							} catch (error) {
+								console.error("API Error:", error);
+								this.error("Something went wrong!");
+							} finally {
+								this.isLoading = false;
+							}
 						} else {
-							this.error(rsp.data.message || 'Failed to fetch tags.');
-						} 
-					} catch (error) {
-						this.error('Unable to fetch tags. Please check the server.');
-					} finally {
-						this.isLoading = false;
-					}
-				},
+							this.isLoading = false;
+						}
+					},
 
-				// Detail
-				async detail(id) {
-					try {
-						const rsp = await this.callApi('get', 'api/tag/' + id);
+					// Get All Item
+					async getAll(page = 1) {
+						try {
+							this.isLoading = true;
+							const rsp = await this.callApi('get', `api/tag?page=${page}`);
 
-						if (rsp.success == true) {
-							this.addModal       = true;
-							this.data.tag_name  = rsp.data.name;
-							this.data.is_active = rsp.data.isActive;
-							this.data.id 		= rsp.data.id;
-						} else {
+							if (rsp.success) {
+								this.tags 		= rsp.data || [];							
+								this.pagination = rsp.pagination;
+							} else {
+								this.error(rsp.data.message || 'Failed to fetch tags.');
+							} 
+						} catch (error) {
+							this.error('Unable to fetch tags. Please check the server.');
+						} finally {
+							this.isLoading = false;
+						}
+					},
+
+					// Detail
+					async detail(id) {
+						try {
+							const rsp = await this.callApi('get', 'api/tag/' + id);
+
+							if (rsp.success == true) {
+								this.addModal       = true;
+								this.data.tag_name  = rsp.data.name;
+								this.data.is_active = rsp.data.isActive;
+								this.data.id 		= rsp.data.id;
+							} else {
+								this.error('Item not found. Please check the server.');
+							}
+						} catch (error) {
 							this.error('Item not found. Please check the server.');
 						}
-					} catch (error) {
-						this.error('Item not found. Please check the server.');
-					}
-				},
+					},
+				}
 			}
-		}
 	</script>

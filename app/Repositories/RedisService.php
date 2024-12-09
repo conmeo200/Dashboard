@@ -13,6 +13,7 @@ class RedisService
         $this->redis = Redis::connection();
     }
 
+    // Use data type list for Redis
     public function list($key, $data = [])
     {
         if (empty($data) && empty($key)) return false;
@@ -140,7 +141,72 @@ class RedisService
             return false;
         }
     }
+    // End use data type list for Redis
 
+    // Use data type sorted set for Redis
+    public function listSorted($key, $data = [], $score = '', $member = '', $start = 0, $end = -1, $sort ='WITHSCORES')
+    {
+        try {
+            if (empty($data) && empty($key)) return [];
+
+            $cachedData = $this->redis->zrevrange($key, $start, $end, $sort);
+
+            if (!empty($cachedData)) {
+                $listData = [];
+
+                foreach($cachedData as $value) {
+                    $item = $this->redis->hgetall("blog:{$value}");
+
+                    if (empty($item) || (!empty($item) && empty($item['data']))) continue;
+
+                    $listData[] = json_decode($item['data'], true);    
+                }
+
+                return $listData;
+            }
+            
+            if (!empty($score) && !empty($member) && !empty($data)) {
+                foreach($data as $value) 
+                {
+                    $this->redis->zadd($key, $value[$score], $value[$member]);
+    
+                    if (!$this->redis->exists("blog:{$value['id']}")) {
+                        $this->redis->hset("blog:{$value['id']}", "data", json_encode($value));
+                    }
+                }
+            }
+
+            return $data;
+        } catch (\Exception $ex) {
+            Log::error("Error push data to key {$key} for Sorted Redis");
+
+            return false;
+        }
+    }
+
+    public function detailOrCreate($key, $data = [])
+    {
+        try {
+            if (empty($key)) return [];
+
+            $cachedData = $this->redis->hgetall($key);
+
+            // Set data to Redis
+            if (empty($cachedData) && !empty($data)) {
+                 $this->redis->hset($key, $data);
+
+                 return $data;
+            }
+            
+            return $cachedData;
+
+        } catch (\Exception $ex) {
+            Log::error("Error push detail data to key {$key} for Redis");
+
+            return false;
+        }
+    }
+    // End use data type sorted set for Redis
     /**
      * Set giá trị cho key với thời gian hết hạn (tùy chọn).
      */

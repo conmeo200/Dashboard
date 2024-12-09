@@ -17,6 +17,8 @@ import Hooks from "./components/Generate/Hooks.vue";
 // url pages
 import home from "./components/Page/home";
 import tags from "./components/Page/tags";
+import blogs from "./components/Page/blogs";
+import blog_detail from "./components/Page/blogDetail";
 
 
 const routes = [
@@ -29,6 +31,16 @@ const routes = [
         name: 'tags',
         path: '/tags',
         component: tags
+    },
+    {
+        name: 'blogs',
+        path: '/blogs',
+        component: blogs
+    },
+    {
+        name: 'blog_detail',
+        path: '/blog/:id/detail',
+        component: blog_detail
     },
     {
         name: 'Dashboard',

@@ -35,6 +35,23 @@ Route::get('/test-redis', function () {
     return $redis->get('test1');
 });
 
+Route::get('/publish-notification', function () {
+    $redis   = app('redis'); // Lấy Redis instance
+    $channel = 'notifications'; // Tên kênh Redis
+
+    $message = [
+        'title'     => 'Hello World',
+        'body'      => 'This is a test notification from Redis Pub/Sub',
+        'timestamp' => now()->toDateTimeString(),
+    ];
+
+    // Gửi (publish) message đến Redis
+    $redis->publish($channel, json_encode($message));
+
+    return response()->json(['status' => 'Notification published']);
+});
+
+
 Route::get('/test-mongodb', function () {
     //$collection = LogActivity::get();
     $logs = new Logs();

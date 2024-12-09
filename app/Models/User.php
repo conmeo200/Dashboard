@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -22,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -43,7 +46,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // protected $appends = ['created_time_format', 'updated_time_format'];
+    public    $timestamps      = false;
+
     public function subdomain(){
         return $this->belongsToMany(Subdomain::class, 'subdomain_user', 'subdomain_id', 'user_id');
     }
+
+    // public function getCreatedTimeFormatAttribute()
+    // {
+    //     return Carbon::createFromTimestamp($this->created_at)->format('d/m/Y H:i');  
+    // }
+
+    // public function getUpdatedTimeFormatAttribute()
+    // {
+    //     return Carbon::createFromTimestamp($this->updated_at)->format('d/m/Y H:i');  
+    // }
 }

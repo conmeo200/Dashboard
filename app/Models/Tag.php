@@ -13,7 +13,7 @@ class Tag extends Model
     protected $table           = 'tags';
     protected $fillable        = ['id', 'name', 'isActive', 'created_time', 'updated_time'];
     public    $timestamps      = false;
-    private   static $instance = [];
+    public   static $instance  = [];
     protected $appends = ['created_time_format', 'updated_time_format'];
 
     public function getCreatedTimeFormatAttribute()
