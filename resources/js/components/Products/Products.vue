@@ -102,7 +102,7 @@ export default {
 				};
 
 				const queryString = new URLSearchParams(params).toString();
-				const rsp         = await this.callApi('get', `api/prodcuts?${queryString}`);
+				const rsp         = await this.callApi('get', `api/prodcut?${queryString}`);
 				//console.log(rsp, queryString); return;
 				if (rsp.success) {
 					this.prodcuts 		= rsp.data || [];							

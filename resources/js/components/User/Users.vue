@@ -102,7 +102,7 @@ export default {
 				};
 
 				const queryString = new URLSearchParams(params).toString();
-				const rsp         = await this.callApi('get', `api/users?${queryString}`);
+				const rsp         = await this.callApi('get', `api/user?${queryString}`);
 				//console.log(rsp, queryString); return;
 				if (rsp.success) {
 					this.users 		= rsp.data || [];							
