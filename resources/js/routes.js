@@ -1,17 +1,10 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import Dashboard from "./components/Dashboard/Dashboard.vue";
-import User from "./components/User/User.vue";
-import Role from "./components/Role/Role.vue";
-import Log from "./components/Log/Log.vue";
-import Notifications from "./components/Notification/Notifications.vue";
-import Form from "./components/Form/Form.vue";
-import Products from "./components/Products/Products.vue";
-import CreateProduct from "./components/Products/CreateProduct.vue";
-import LeadForm from "./components/LeadForm/FormTest.vue";
+// route auth
 import Login from "./components/Auth/Login.vue";
 import Register from "./components/Auth/Register.vue";
 import Forgotpassword from "./components/Auth/Forgotpassword.vue";
+
 import Hooks from "./components/Generate/Hooks.vue";
 
 // url pages
@@ -20,6 +13,20 @@ import tags from "./components/Page/tags";
 import blogs from "./components/Page/blogs";
 import blog_detail from "./components/Page/blogDetail";
 
+// route users
+import Users      from "./components/User/Users.vue";
+import UserDetail from "./components/User/UserDetail.vue";
+import CreateUser from "./components/User/CreateUser.vue";
+
+// route products
+import Products      from "./components/Products/Products.vue";
+import ProductDetail from "./components/Products/ProductDetail.vue";
+import CreateProduct from "./components/Products/CreateProduct.vue";
+
+// route orders
+import Orders      from "./components/Orders/Orders.vue";
+import OrderDetail from "./components/Orders/OrderDetail.vue";
+import CreateOrder from "./components/Orders/CreateOrder.vue";
 
 const routes = [
     {
@@ -42,55 +49,53 @@ const routes = [
         path: '/blog/:id/detail',
         component: blog_detail
     },
+
     {
-        name: 'Dashboard',
-        path: '/dashboard',
-        component: Dashboard,
-        meta: { breadcrumb: 'Dashboard', page: 'Dashboard' }
+        name: 'users',
+        path: '/users',
+        component: Users
     },
     {
-        name: 'User',
-        path: '/user',
-        component: User,
-        meta: { breadcrumb: 'User', page: 'User' }
+        name: 'create-user',
+        path: '/create-user',
+        component: CreateUser
     },
     {
-        name: 'Role',
-        path: '/role',
-        component: Role,
-        meta: { breadcrumb: 'Role', page: 'Role' }
+        name: 'user-detail',
+        path: '/user/:id/detail',
+        component: UserDetail
     },
+
     {
-        name: 'Log',
-        path: '/log',
-        component: Log,
-        meta: { breadcrumb: 'Log', page: 'Log' }
-    },
-    {
-        name: 'Notifications',
-        path: '/notifications',
-        component: Notifications,
-        meta: { breadcrumb: 'Notifications', page: 'Notifications' }
-    },
-    {
-        name: 'Form',
-        path: '/form',
-        component: Form,
-    },
-    {
-        name: 'Products',
+        name: 'products',
         path: '/products',
-        component: Products,
+        component: Products
     },
     {
-        name: 'CreateProduct',
+        name: 'create-product',
         path: '/create-product',
-        component: CreateProduct,
+        component: CreateProduct
     },
     {
-        name: 'LeadForm',
-        path: '/leadform',
-        component: LeadForm,
+        name: 'product-detail',
+        path: '/product/:id/detail',
+        component: ProductDetail
+    },
+
+    {
+        name: 'orders',
+        path: '/orders',
+        component: Orders
+    },
+    {
+        name: 'create-order',
+        path: '/create-order',
+        component: CreateOrder
+    },
+    {
+        name: 'order_detail',
+        path: '/order/:id/detail',
+        component: OrderDetail
     },
     {
         name: 'Login',

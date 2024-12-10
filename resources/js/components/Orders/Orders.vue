@@ -5,18 +5,19 @@
 
 				<!--~~~~~~~ TABLE ONE ~~~~~~~~~-->
 				<div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20">
-					<p class="_title0">Products 
-						<Button><Icon type="md-add" /> Create Product</Button>						
+					<p class="_title0">Orders 
+						<Button><Icon type="md-add" /> Create Order</Button>						
 					</p>				
 					<div class="_overflow _table_div">
 							<table class="_table">
 									<!-- TABLE TITLE -->
 									<tr>
 										<th>ID</th>
+										<th>Created Time</th>
 										<th>Product Name</th>
 										<th>Product Price</th>
-										<th>Created Time</th>
-										<th>Status</th>
+										<th>Total</th>
+										<th>Request By</th>
 										<th>Action</th>
 									</tr>
 									<!-- TABLE TITLE -->
@@ -30,10 +31,10 @@
 								</tr>
 
 								<template v-else>
-									<tr v-if="!prodcuts.length">
+									<tr v-if="!orders.length">
 										<td colspan="6" class="text-center">No Result</td>
 									</tr>
-									<!-- <tr v-else v-for="(blog, i) in prodcuts" :key="i">
+									<!-- <tr v-else v-for="(blog, i) in orders" :key="i">
 										<td>{{ blog.id }}</td>
 										<td class="">{{ blog.title }}</td>
 										<td> 
@@ -80,7 +81,7 @@ export default {
 	data(){
 		return {			
 			isAdding  : false,
-			prodcuts     : [],
+			orders     : [],
 			isLoading : false,
 			isDisabled: false,
 			pagination: [],
@@ -102,17 +103,17 @@ export default {
 				};
 
 				const queryString = new URLSearchParams(params).toString();
-				const rsp         = await this.callApi('get', `api/prodcuts?${queryString}`);
+				const rsp         = await this.callApi('get', `api/orders?${queryString}`);
 				//console.log(rsp, queryString); return;
 				if (rsp.success) {
-					this.prodcuts 		= rsp.data || [];							
+					this.orders 		= rsp.data || [];							
 					this.pagination = rsp.pagination;
 				} else {
-					this.prodcuts 		= [];	
-					this.error(rsp.data.message || 'Failed to fetch prodcuts.');
+					this.orders 		= [];		
+					this.error(rsp.data.message || 'Failed to fetch orders.');
 				} 
 			} catch (error) {
-				this.error('Unable to fetch prodcuts. Please check the server.');
+				this.error('Unable to fetch orders. Please check the server.');
 			} finally {
 				this.isLoading = false;
 			}

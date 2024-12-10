@@ -19,8 +19,11 @@
           <div class="_1side_menu_list">
             <ul class="_1side_menu_list_ul">
               <li><router-link to="/"><Icon type="ios-speedometer" /> Dashboard</router-link></li>
-              <li><router-link to="tags"><Icon type="ios-speedometer" /> Tag</router-link></li>
-              <li><router-link to="blogs"><Icon type="ios-speedometer" /> Blog</router-link></li>
+              <li><router-link to="tags"><Icon type="ios-speedometer" /> Tags</router-link></li>
+              <li><router-link to="blogs"><Icon type="ios-speedometer" /> Blogs</router-link></li>
+              <li><router-link to="users"><Icon type="ios-speedometer" /> Users</router-link></li>
+              <li><router-link to="products"><Icon type="ios-speedometer" /> Products</router-link></li>
+              <li><router-link to="orders"><Icon type="ios-speedometer" /> Orders</router-link></li>
               <!-- <li><router-link to="category"><Icon type="ios-speedometer" /> Category</router-link></li>
               <li><router-link to="adminusers"><Icon type="ios-speedometer" /> Admin users</router-link></li>
               <li><router-link to="role"><Icon type="ios-speedometer" /> Role Management</router-link></li>

@@ -5,18 +5,18 @@
 
 				<!--~~~~~~~ TABLE ONE ~~~~~~~~~-->
 				<div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20">
-					<p class="_title0">Products 
-						<Button><Icon type="md-add" /> Create Product</Button>						
+					<p class="_title0">Users 
+						<Button><Icon type="md-add" /> Create User</Button>						
 					</p>				
 					<div class="_overflow _table_div">
 							<table class="_table">
 									<!-- TABLE TITLE -->
 									<tr>
 										<th>ID</th>
-										<th>Product Name</th>
-										<th>Product Price</th>
-										<th>Created Time</th>
-										<th>Status</th>
+										<th>Name</th>
+										<th>Email</th>
+										<th>Create</th>
+										<th>Detail</th>
 										<th>Action</th>
 									</tr>
 									<!-- TABLE TITLE -->
@@ -30,10 +30,10 @@
 								</tr>
 
 								<template v-else>
-									<tr v-if="!prodcuts.length">
+									<tr v-if="!users.length">
 										<td colspan="6" class="text-center">No Result</td>
 									</tr>
-									<!-- <tr v-else v-for="(blog, i) in prodcuts" :key="i">
+									<!-- <tr v-else v-for="(blog, i) in users" :key="i">
 										<td>{{ blog.id }}</td>
 										<td class="">{{ blog.title }}</td>
 										<td> 
@@ -80,7 +80,7 @@ export default {
 	data(){
 		return {			
 			isAdding  : false,
-			prodcuts     : [],
+			users     : [],
 			isLoading : false,
 			isDisabled: false,
 			pagination: [],
@@ -102,17 +102,17 @@ export default {
 				};
 
 				const queryString = new URLSearchParams(params).toString();
-				const rsp         = await this.callApi('get', `api/prodcuts?${queryString}`);
+				const rsp         = await this.callApi('get', `api/users?${queryString}`);
 				//console.log(rsp, queryString); return;
 				if (rsp.success) {
-					this.prodcuts 		= rsp.data || [];							
+					this.users 		= rsp.data || [];							
 					this.pagination = rsp.pagination;
 				} else {
-					this.prodcuts 		= [];	
-					this.error(rsp.data.message || 'Failed to fetch prodcuts.');
+					this.users 		= [];
+					this.error(rsp.data.message || 'Failed to fetch users.');
 				} 
 			} catch (error) {
-				this.error('Unable to fetch prodcuts. Please check the server.');
+				this.error('Unable to fetch users. Please check the server.');
 			} finally {
 				this.isLoading = false;
 			}
