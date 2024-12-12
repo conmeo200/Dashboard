@@ -6,7 +6,10 @@
 				<!--~~~~~~~ TABLE ONE ~~~~~~~~~-->
 				<div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20">
 					<p class="_title0">Users 
-						<Button><Icon type="md-add" /> Create User</Button>						
+						<router-link :to="{ name: 'create-user'}">
+							<Button><Icon type="md-add" /> Create User</Button>
+						</router-link>
+												
 					</p>				
 					<div class="_overflow _table_div">
 							<table class="_table">
@@ -15,8 +18,9 @@
 										<th>ID</th>
 										<th>Name</th>
 										<th>Email</th>
+										<th>Role</th>
+										<th>Status</th>
 										<th>Create</th>
-										<th>Detail</th>
 										<th>Action</th>
 									</tr>
 									<!-- TABLE TITLE -->
@@ -24,7 +28,7 @@
 
 									<!-- ITEMS -->
 								<tr v-if="isLoading">
-									<td colspan="6" class="text-center">
+									<td colspan="7" class="text-center">
 										<Button loading shape="circle"></Button>
 									</td>
 								</tr>
@@ -33,31 +37,20 @@
 									<tr v-if="!users.length">
 										<td colspan="6" class="text-center">No Result</td>
 									</tr>
-									<!-- <tr v-else v-for="(blog, i) in users" :key="i">
-										<td>{{ blog.id }}</td>
-										<td class="">{{ blog.title }}</td>
-										<td> 
-											<div v-if="blog.categories && blog.categories.length">
-												<span v-for="(c, j) in blog.categories" :key="j">
-													<Tag type="border">{{ c.name }}</Tag>
-												</span>
-											</div>
-											<div v-else></div>
-										</td>
+									<tr v-else v-for="(user, i) in users" :key="i">
+										<td>{{ user.id }}</td>
+										<td class="">{{ user.name }}</td>									
+										<td class="">{{ user.email }}</td>	
+										<td>{{ user.userType }}</td>									
 										<td>
-											<div v-if="blog.tag && blog.tag.length">
-												<span v-for="(c, j) in blog.tag" :key="j">
-													<Tag type="border">{{ c.name }}</Tag>
-												</span>
-											</div>
-											<div v-else></div>
-										</td>
-										<td>{{ blog.views }}</td>										
+											<Button :type="user.isActive === 'Y' ? 'success' : 'error'">{{ user.isActive }}</Button>
+										</td>																											
+										<td class="">{{ user.created_at }}</td>
 										<td>
 											<button class="_btn _action_btn view_btn1" type="button">View</button>
 											<button class="_btn _action_btn make_btn1" type="button">Delete</button>
 										</td>
-									</tr> -->
+									</tr>
 								</template>
 
 									<!-- ITEMS -->
@@ -84,20 +77,18 @@ export default {
 			isLoading : false,
 			isDisabled: false,
 			pagination: [],
-			page      : 1,
-			sorted	  : 'blog_created_list'
+			page      : 1
 		}
 	},
 	mounted() {
 		this.getAll();
 	},
 	methods : {
-		async getAll(page = 1, sorted = 'blog_created_list') {
+		async getAll(page = 1) {
 			try {
 				this.isLoading = true;
 
 				let params = {
-					'sort' : sorted,
 					'page' : page
 				};
 

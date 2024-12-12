@@ -1,52 +1,48 @@
 <?php
-namespace App\Repositories\BlogsRepositores;
+namespace App\Repositories\UsersRepositores;
 
-use App\Models\Blog;
+use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\RedisService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class BlogsRepositores extends BaseRepository 
+class UsersRepositores extends BaseRepository 
 {
-    const MODEL            = "blog"; 
-    const KEY_LIST_CREATED = "created";
-    const KEY_LIST_VIEWS   = "views";
+    const MODEL       = "user"; 
+    const KEY_LIST_ID = "user_id_list";
     
     public function getModel()
     {
-        $model = Blog::getInstance();
+        $model = User::getInstance();
     
         return $model::class;
     }
 
-    public function getAllBlogs($params = []) 
+    public function getAllUsers($params = []) 
     {
         try {
             $redisService = new RedisService();
             $member       = 'id';
             $key          = self::MODEL;
-            $orderBy      = 'created_time';
-
-            if (!empty($params['sort']) && $params['sort'] == self::KEY_LIST_VIEWS) {
-                $orderBy = 'views';
-            }
+            $orderBy      = 'id';
             
-            // Store Data To Redis 
-            $existsCache = $redisService->exists($key);
+            // Store Data To Redis
+            $existsCache = $redisService->exists(self::KEY_LIST_ID);
 
-            if ($existsCache) $blogs = $redisService->listSorted($key, [], $orderBy);
+            if ($existsCache) $users = $redisService->listSorted($key, [], $orderBy);
             else {
-                $blog  = parent::with(['categories', 'tag', 'user']);
-                $blogs = $blog->orderBy($orderBy, 'DESC')->get()->toArray();
+                //$user  = parent::with(['categories', 'tag', 'user']);
+                $users = parent::orderBy($orderBy, 'DESC')->get()->toArray();
 
-                $redisService->listSorted($key, $blogs, $orderBy, $member);
+                $redisService->listSorted($key, $users, $orderBy, $member);
             }
 
-            return $blogs;
+            return $users;
         } catch (\Exception $ex) {
-            Log::error("Get data list blogs error: {$ex->getMessage()}");
+            Log::error("Get data list users error: {$ex->getMessage()}");
 
             return [];
         }
@@ -58,6 +54,7 @@ class BlogsRepositores extends BaseRepository
 
         $item['created_time'] = Carbon::now()->timestamp;
         $item['updated_time'] = Carbon::now()->timestamp;
+        $item['password']     = Hash::make($item['password']);
 
         try {
              $insert = parent::insertGetRecord($item);
@@ -66,7 +63,7 @@ class BlogsRepositores extends BaseRepository
                 return false;
              }
 
-             $insertCache = $redisService->create(self::KEY_LIST, $insert);
+             $insertCache = $redisService->create(self::MODEL, $insert);
 
              if (empty($insertCache)) {
 
@@ -90,9 +87,7 @@ class BlogsRepositores extends BaseRepository
             $existsCache  = $redisService->exists($key);
 
             if (!$existsCache) {
-                $blog = parent::with(['categories', 'tag', 'user'])
-                ->where('id', $id)
-                ->first();
+                $blog = parent::where('id', $id)->first();
 
                 // Store blog to redis
                 $redisService->detailOrCreate($key, $blog->toArray());

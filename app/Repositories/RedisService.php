@@ -146,16 +146,18 @@ class RedisService
     // Use data type sorted set for Redis
     public function listSorted($key, $data = [], $score = '', $member = '', $start = 0, $end = -1, $sort ='WITHSCORES')
     {
-        try {
-            if (empty($data) && empty($key)) return [];
+        if (empty($data) && empty($key)) return [];
+        
+        $keyRedis = $key . '_' . $score . '_list'; 
 
-            $cachedData = $this->redis->zrevrange($key, $start, $end, $sort);
+        try {        
+            $cachedData = $this->redis->zrevrange($keyRedis, $start, $end, $sort);
 
             if (!empty($cachedData)) {
                 $listData = [];
 
                 foreach($cachedData as $value) {
-                    $item = $this->redis->hgetall("blog:{$value}");
+                    $item = $this->redis->hgetall("{$key}:{$value}");
 
                     if (empty($item) || (!empty($item) && empty($item['data']))) continue;
 
@@ -164,14 +166,14 @@ class RedisService
 
                 return $listData;
             }
-            
+
             if (!empty($score) && !empty($member) && !empty($data)) {
                 foreach($data as $value) 
                 {
-                    $this->redis->zadd($key, $value[$score], $value[$member]);
+                    $this->redis->zadd($keyRedis, $value[$score], $value[$member]);
     
-                    if (!$this->redis->exists("blog:{$value['id']}")) {
-                        $this->redis->hset("blog:{$value['id']}", "data", json_encode($value));
+                    if (!$this->redis->exists("{$key}:{$value['id']}")) {
+                        $this->redis->hset("{$key}:{$value['id']}", "data", json_encode($value));
                     }
                 }
             }

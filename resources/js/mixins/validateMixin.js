@@ -38,6 +38,32 @@ export default {
             }
         
             return true;
+        },
+        numberOnly(event, maxLength, leadingZero = true, allowDecimal = false) {
+            let value = event.target.value;
+
+            if (allowDecimal) {
+                value = value.replace(/[^0-9.]/g, '');
+
+                let parts = value.split('.');
+                if (parts.length > 2) {
+                    value = parts[0] + '.' + parts.slice(1).join('');
+                }
+            } else {
+                value = value.replace(/[^0-9]/g, '');
+            }
+
+            if (!leadingZero) {
+                if (value.startsWith('0') && value.length > 1 && (allowDecimal ? value[1] !== '.' : true)) {
+                    value = value.replace(/^0+/, '');
+                }
+            }
+
+            if (maxLength && value.length > maxLength) {
+                value = value.slice(0, maxLength);
+            }
+
+            this.price = value;
         }
     },
 };

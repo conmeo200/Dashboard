@@ -14,6 +14,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+    private static $instance  = [];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -51,6 +53,15 @@ class User extends Authenticatable
 
     public function subdomain(){
         return $this->belongsToMany(Subdomain::class, 'subdomain_user', 'subdomain_id', 'user_id');
+    }
+
+    public static function getInstance()
+    {
+        if (empty(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     // public function getCreatedTimeFormatAttribute()

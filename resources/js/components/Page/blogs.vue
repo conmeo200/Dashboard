@@ -58,8 +58,10 @@
 											<div v-else></div>
 										</td>
 										<td>{{ blog.views }}</td>										
-										<td>
-											<button class="_btn _action_btn view_btn1" type="button">View</button>
+										<td>											
+											<router-link :to="{ name: 'blog_detail', params: { id: blog.id }}">
+												<button class="_btn _action_btn view_btn1" type="button">View</button>
+											</router-link>
 											<button class="_btn _action_btn make_btn1" type="button">Delete</button>
 										</td>
 									</tr>

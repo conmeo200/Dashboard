@@ -94,7 +94,7 @@ class BaseApiController extends Controller
      */
     public function sendPaginationArrayResponse($result, $message = '')
     {
-        $paged   = request()->get('page', 1);
+        $paged   = (int) request()->get('page', 1);
         $perPage = request()->get('per_page', 10);
 
         if (!is_numeric($paged)) $paged = 1;
@@ -102,7 +102,7 @@ class BaseApiController extends Controller
 
         $result    = collect($result);
         $paginator = new LengthAwarePaginator(
-            $result->forPage($paged, $perPage),
+            array_values($result->forPage($paged, $perPage)->toArray()),
             collect($result)->count(),
             $perPage,
             $paged,

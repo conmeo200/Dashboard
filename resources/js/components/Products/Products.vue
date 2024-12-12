@@ -6,7 +6,9 @@
 				<!--~~~~~~~ TABLE ONE ~~~~~~~~~-->
 				<div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20">
 					<p class="_title0">Products 
-						<Button><Icon type="md-add" /> Create Product</Button>						
+						<router-link :to="{ name: 'create-product'}">
+							<Button><Icon type="md-add" /> Create Product</Button>
+						</router-link>					
 					</p>				
 					<div class="_overflow _table_div">
 							<table class="_table">
@@ -15,8 +17,9 @@
 										<th>ID</th>
 										<th>Product Name</th>
 										<th>Product Price</th>
-										<th>Created Time</th>
+										<th>Currency</th>
 										<th>Status</th>
+										<th>Created Time</th>
 										<th>Action</th>
 									</tr>
 									<!-- TABLE TITLE -->
@@ -24,40 +27,27 @@
 
 									<!-- ITEMS -->
 								<tr v-if="isLoading">
-									<td colspan="6" class="text-center">
+									<td colspan="7" class="text-center">
 										<Button loading shape="circle"></Button>
 									</td>
 								</tr>
 
 								<template v-else>
-									<tr v-if="!prodcuts.length">
-										<td colspan="6" class="text-center">No Result</td>
+									<tr v-if="!products.length">
+										<td colspan="7" class="text-center">No Result</td>
 									</tr>
-									<!-- <tr v-else v-for="(blog, i) in prodcuts" :key="i">
-										<td>{{ blog.id }}</td>
-										<td class="">{{ blog.title }}</td>
-										<td> 
-											<div v-if="blog.categories && blog.categories.length">
-												<span v-for="(c, j) in blog.categories" :key="j">
-													<Tag type="border">{{ c.name }}</Tag>
-												</span>
-											</div>
-											<div v-else></div>
-										</td>
-										<td>
-											<div v-if="blog.tag && blog.tag.length">
-												<span v-for="(c, j) in blog.tag" :key="j">
-													<Tag type="border">{{ c.name }}</Tag>
-												</span>
-											</div>
-											<div v-else></div>
-										</td>
-										<td>{{ blog.views }}</td>										
+									<tr v-else v-for="(product, i) in products" :key="i">
+										<td>{{ product.id }}</td>
+										<td class="">{{ product.name }}</td>								
+										<td class="">{{ product.price }}</td>						
+										<td class="">{{ product.currency }}</td>					
+										<td class="">{{ product.status }}</td>									
+										<td class="">{{ product.created_time_format }}</td>								
 										<td>
 											<button class="_btn _action_btn view_btn1" type="button">View</button>
 											<button class="_btn _action_btn make_btn1" type="button">Delete</button>
 										</td>
-									</tr> -->
+									</tr>
 								</template>
 
 									<!-- ITEMS -->
@@ -80,39 +70,36 @@ export default {
 	data(){
 		return {			
 			isAdding  : false,
-			prodcuts     : [],
+			products  : [],
 			isLoading : false,
 			isDisabled: false,
 			pagination: [],
-			page      : 1,
-			sorted	  : 'blog_created_list'
+			page      : 1
 		}
 	},
 	mounted() {
 		this.getAll();
 	},
 	methods : {
-		async getAll(page = 1, sorted = 'blog_created_list') {
+		async getAll(page = 1) {
 			try {
 				this.isLoading = true;
 
 				let params = {
-					'sort' : sorted,
 					'page' : page
 				};
 
 				const queryString = new URLSearchParams(params).toString();
-				const rsp         = await this.callApi('get', `api/prodcut?${queryString}`);
-				//console.log(rsp, queryString); return;
+				const rsp         = await this.callApi('get', `api/product?${queryString}`);
+				console.log(rsp);
 				if (rsp.success) {
-					this.prodcuts 		= rsp.data || [];							
+					this.products 	= rsp.data;							
 					this.pagination = rsp.pagination;
 				} else {
-					this.prodcuts 		= [];	
-					this.error(rsp.data.message || 'Failed to fetch prodcuts.');
+					this.error(rsp.data.message || 'Failed to fetch products.');
 				} 
 			} catch (error) {
-				this.error('Unable to fetch prodcuts. Please check the server.');
+				this.error('Unable to fetch products. Please check the server.');
 			} finally {
 				this.isLoading = false;
 			}
