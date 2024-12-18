@@ -2,25 +2,35 @@ import axios from "axios";
 
 export default {
     data() {
-        return {
-            // Bạn có thể thêm các thuộc tính data chung ở đây
-        };
+        return {};
     },
+  
     methods: {
-        async callApi(method, url, data = {}) {
-            
+        async callApi(method, url, data = {}, recaptcha = false) {
             try {
-              const response = await axios({
-                method: method,
-                url   : url,
-                data  : data,
-              });
+                console.log(this.$recaptchaSiteKey); 
+                if (recaptcha && (method === 'POST' || method === 'PUT')) {
+                    
+                    const token = await grecaptcha.execute('6LecCp4qAAAAAH8z5ECCqPg1tmK7pw9v1vWgt_GJ', { action: 'submit_form' });
+        
+                    if (!data || typeof data !== 'object') {
+                        data = {};
+                    }
                 
-              return response.data;  // Trả về dữ liệu API
+                    data['token'] = token;
+                }
+                
+                const response = await axios({
+                    method: method,
+                    url   : url,
+                    data  : data,
+                });
+        
+                return response.data;
             } catch (error) {
-              console.error("API Error:", error);
-              return error.response;  // Trả về lỗi nếu có
+                console.error("API Error:", error);
+                return error.response;
             }
-        },
+        },  
     }
 };

@@ -1,28 +1,43 @@
 <template>
     <div class="demo-login">
-        <Login @on-submit="handleSubmit">
-            <UserName name="email" />
-            <Password name="password" />
-            
-            <Submit />
-        </Login>
+        <h1 style="text-align: center;margin-bottom: 20px;">Login</h1>
+        <form>
+            <Input type="email" v-model="formLogin.email" placeholder="Email">
+                <template #prepend>
+                  <Icon type="ios-person-outline"></Icon>
+                </template>
+            </Input>
+
+            <br>
+
+            <Input type="password" v-model="formLogin.password" placeholder="Password">
+                <template #prepend>
+                  <Icon type="ios-lock-outline"></Icon>
+                </template>
+            </Input>
+
+            <br>
+
+            <Button @click="handleSubmit">Sign In</Button>
+        </form>
     </div>
 </template>
 <script>
     export default {
         data () {
             return {
-                autoLogin: true
-            }
-        },
-        methods: {
-            handleSubmit (valid, { username, password }) {
-                if (valid) {
-                    this.$Modal.info({
-                        title: '输入的内容如下：',
-                        content: 'username: ' + username + ' | password: ' + password
-                    });
+                autoLogin: true,
+                formLogin: {
+                    email : '',
+                    password : '',
                 }
+            }
+    },
+
+        methods: {
+            async handleSubmit() {
+                const rsp = await this.callApi('POST', 'api/login', this.formLogin, true);
+                console.log(rsp); return;
             }
         }
     }

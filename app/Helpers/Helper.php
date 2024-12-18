@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('LogError')) {
@@ -19,5 +20,33 @@ if (!function_exists('findFirstValueArray')) {
         });
 
         return $result ? $result : [];
+    }
+}
+
+if (!function_exists('verifyReCaptcha')) {
+    function verifyReCaptcha($token)
+    {
+        $secretKey = env('RECAPTCHA_SECRET_KEY');
+
+        if (empty($token) || empty($secretKey)) return false;
+
+        try {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret'   => $secretKey,
+                'response' => $token,
+            ]);
+    
+            $data = $response->json();
+    
+            if ($data['success'] && $data['score'] > 0.5) {
+                return true;
+            }
+    
+            return false;
+        } catch (\Exception $exeption) {
+            Log::error("Error : {$exeption->getMessage()}");
+
+            return false;
+        }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div>
+      <div v-if="isAuth">
       <!--========== ADMIN SIDE MENU one ========-->
       <div class="_1side_menu" >
         <div class="_1side_menu_logo">
@@ -65,13 +65,23 @@
         </div>
       </div>
       <!--========= HEADER ==========-->
-    </div>
-    	<router-view/>
+      </div>
+
+      <div v-else style="margin-top: 60px">
+        <Login />
+      </div>
     </div>
 </template>
 
 <script>
+import Login from './components/Auth/Login.vue'
+
 export default {
-    
+    components : {Login},
+    data() {
+      return {
+          isAuth : false
+      }
+    }
 }
 </script>

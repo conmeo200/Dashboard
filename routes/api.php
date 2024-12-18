@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,16 @@ use App\Http\Controllers\Api\OrderController;
 |
 */
 
+// Auth
+Route::post('/register', [AuthController::class, 'handleRegister']);
+Route::post('/login', [AuthController::class, 'handleLogin']);
+
+Route::group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/logout', [AuthController::class, 'handleLogout']);
+});
+// End Auth
+
+// Page
 Route::group(['prefix' => 'tag'], function () {
     Route::get('/', [TagsController::class, 'index']);
     Route::post('/create', [TagsController::class, 'create']);
@@ -25,7 +36,6 @@ Route::group(['prefix' => 'tag'], function () {
     Route::post('/{id}', [TagsController::class, 'update']);
     Route::delete('/{id}', [TagsController::class, 'delete']);
 });
-
 
 Route::group(['prefix' => 'blog'], function () {
     Route::get('/', [BlogController::class, 'index']);
@@ -58,3 +68,4 @@ Route::group(['prefix' => 'order'], function () {
     Route::post('/{id}', [OrderController::class, 'update']);
     Route::delete('/{id}', [OrderController::class, 'delete']);
 });
+// End Page

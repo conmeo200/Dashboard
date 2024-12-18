@@ -2,66 +2,72 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Repositories\User\UserResponse;
 use App\Service\TwilioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends BaseApiController
 {
-    protected $twilioService;
     protected $userResponse;
 
-    public function __construct(TwilioService $twilioService, UserResponse $userResponse)
+    public function __construct(UserResponse $userResponse)
     {
-        $this->twilioService = $twilioService;
         $this->userResponse  = $userResponse;
     }
 
     public function handleRegister(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             $validator = Validator::make($request->all(), [
                 'name'     => ['required', 'min:6', 'max:255'],
                 'email'    => ['required', 'email', 'max:255'],
-                'password' => ['required', 'min:6', 'max:255']
+                'password' => ['required', 'min:6', 'max:255'],
+                'token'    => ['required'],
             ]);
 
             if ($validator->fails()) {
                 return $this->sendError($validator->errors()->toArray());
             }
 
-              // Insert User
+            // Insert User
+            $dataPost       = $validator->validated();
+            $checkRecaptcha = verifyReCaptcha($dataPost['token']);
 
-            $insertUser = $this->userResponse->create($validator->validated());
+            if (!$checkRecaptcha) return $this->sendError($checkRecaptcha);
+
+            unset($dataPost['token']);
+            $insertUser = $this->userResponse->create($dataPost);
 
             if ($insertUser) {
-                 $token = $insertUser->createToken('authToken')->plainTextToken;
+                DB::commit();
 
-                 return response()->json([
-                    'status_code'  => 200,
+                $token  = $insertUser->createToken('authToken')->plainTextToken;
+                $result = [                    
                     'access_token' => $token,
                     'token_type'   => 'Bearer',
                     'data'         => $insertUser,
-                ]);
+                ];                
+
+                return $this->sendResponse($result, 'Login Success !');
             } else {
-                return response()->json([
+                DB::rollBack();
+
+                $result = [
                     'status_code' => 500,
                     'message'     => 'Error in Login',
-                ]);
+                ];
+
+                return $this->sendError('Login Fail!');
             }
         } catch (\Exception $error) {
             LogError('Register', $error->getMessage(), $error->getLine(), $error->getFile());
 
-            return response()->json([
-                'status_code' => 500,
-                'message'     => 'Error in Register',
-                'error'       => $$error->getMessage(),
-            ]);
+            return $this->sendError('Error in Register');
         }
     }
 
@@ -96,28 +102,26 @@ class AuthController extends BaseApiController
 
             $token = $user->createToken('authToken')->plainTextToken;
 
-            return response()->json([
-               'status_code'  => 200,
-               'access_token' => $token,
-               'token_type'   => 'Bearer',
-               'data'         => $user,
-           ]);
-
+            $result = [                    
+                'access_token' => $token,
+                'token_type'   => 'Bearer',
+                'data'         => $user,
+            ];   
+            
+            return $this->sendResponse($result, 'Login Success !');
         } catch (\Exception $error) {
             LogError('Login', $error->getMessage(), $error->getLine(), $error->getFile());
 
-            return response()->json([
-                'status_code' => 500,
-                'message'     => 'Error in Login',
-                'error'       => $error,
-            ]);
+            return $this->sendError('Error in Register');
         }
     }
 
     public function handleLogout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-
+        $request->user()->tokens->each(function ($token) {
+            $token->delete();
+        });
+        
         return $this->sendResponse(['message' => 'Logged out successfully']);
     }
 }
