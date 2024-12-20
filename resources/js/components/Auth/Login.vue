@@ -28,11 +28,11 @@
             return {
                 autoLogin: true,
                 formLogin: {
-                    email : '',
-                    password : '',
+                    email   : '',
+                    password: '',
                 }
             }
-    },
+        },
 
         methods: {
             async handleSubmit() {

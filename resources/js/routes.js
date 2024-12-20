@@ -61,7 +61,8 @@ const routes = [
     {
         name: 'home',
         path: '/',
-        component: home
+        component: home,
+        meta: { requiresAuth: true }
     },
     // End Route Home
 
@@ -176,10 +177,30 @@ const routes = [
     }
     // End Route Orders
 ];
-
+  
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+  
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      const token = getCookie('token_name');  // Lấy token từ cookie
+  
+      if (!token) {
+        next({ name: 'Login' });  // Nếu không có token, điều hướng đến trang đăng nhập
+      } else {
+        next();  // Nếu có token, tiếp tục vào route
+      }
+    } else {
+      next();  // Nếu route không yêu cầu xác thực, tiếp tục bình thường
+    }
 });
 
 export default router;
