@@ -5,7 +5,7 @@
 
 				<!--~~~~~~~ TABLE ONE ~~~~~~~~~-->
 				<div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20">
-					<p class="_title0">Blogs 
+					<p class="_title0">Blogs 123123
 						<Button><Icon type="md-add" /> Create Blogs</Button>						
 					</p>
 
@@ -95,11 +95,16 @@ export default {
 			sorted	  : 'blog_created_list'
 		}
 	},
+	created() {
+		console.log(123123123);
+	},
 	mounted() {
 		this.getAll();
+		console.log(123123123);
 	},
 	methods : {
 		async getAll(page = 1, sorted = 'blog_created_list') {
+			console.log(444444444);
 			try {
 				this.isLoading = true;
 

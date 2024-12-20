@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PermissonsController;
+use App\Http\Controllers\Api\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,26 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function () {
     Route::post('/logout', [AuthController::class, 'handleLogout']);
 });
 // End Auth
+
+// Permissions
+Route::group(['prefix' => 'permission'], function () {
+    Route::get('/', [PermissonsController::class, 'index']);
+    Route::post('/create', [PermissonsController::class, 'create']);
+    Route::get('/{id}', [PermissonsController::class, 'detail']);
+    Route::post('/{id}', [PermissonsController::class, 'update']);
+    Route::delete('/{id}', [PermissonsController::class, 'delete']);
+});
+// End Permissions
+
+// Roles
+Route::group(['prefix' => 'role'], function () {
+    Route::get('/', [RoleController::class, 'index']);
+    Route::post('/create', [RoleController::class, 'create']);
+    Route::get('/{id}', [RoleController::class, 'detail']);
+    Route::post('/{id}', [RoleController::class, 'update']);
+    Route::delete('/{id}', [RoleController::class, 'delete']);
+});
+// End Roles
 
 // Page
 Route::group(['prefix' => 'tag'], function () {

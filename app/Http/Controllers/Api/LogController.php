@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Jobs\RegisterUserJob;
 use App\Repositories\Products\ProductsInterface;
 use App\Repositories\Products\ProductsRepository;
 use Illuminate\Http\Request;

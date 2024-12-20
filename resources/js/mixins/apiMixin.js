@@ -2,13 +2,16 @@ import axios from "axios";
 
 export default {
     data() {
-        return {};
+        return {
+           prefix_url: 'http://localhost/'
+       }  
     },
-  
     methods: {
-        async callApi(method, url, data = {}, recaptcha = false) {
-            try {
-                console.log(this.$recaptchaSiteKey); 
+        async callApi(method, endpoint, data = {}, recaptcha = false) {
+            
+            const url = this.prefix_url + endpoint;
+
+            try {                
                 if (recaptcha && (method === 'POST' || method === 'PUT')) {
                     
                     const token = await grecaptcha.execute('6LecCp4qAAAAAH8z5ECCqPg1tmK7pw9v1vWgt_GJ', { action: 'submit_form' });
