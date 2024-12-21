@@ -1,28 +1,39 @@
 <template>
-    <div class="register container">
+    <div class="demo-login">
+        <h1 style="text-align: center;margin-bottom: 20px;">Register</h1>
+        <form >
+        
+            <Input type="text" v-model="name" placeholder="Full Name">
+                <template #prepend>
+                  <Icon type="ios-person-outline"></Icon>
+                </template>
+            </Input>
 
-        <form @submit.prevent="registerUser">
-            <h2>Register</h2>
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" v-model="name"/>
+            <br>
+
+            <Input type="email" v-model="email" placeholder="Email">
+                <template #prepend>
+                  <Icon type="ios-person-outline"></Icon>
+                </template>
+            </Input>
+
+            <br>
+
+            <Input type="password" v-model="password" placeholder="Password">
+                <template #prepend>
+                  <Icon type="ios-lock-outline"></Icon>
+                </template>
+            </Input>
+
+            <br>
+            <div style="text-align:center">
+                <Button @click="registerUser"  type="success" style="margin-right: 10px;">Register</Button>
+                <p>
+                    Already have an account?
+                    <router-link to="/login">Login</router-link>
+                </p>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" v-model="email"/>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" v-model="password"/>
-            </div>
-            <button type="submit">Register</button>
-            <p>
-                Already have an account?
-                <router-link to="/login">Login</router-link>
-            </p>
         </form>
-
-        <AlertComponent v-if="showAlert" :success="isSuccess" :message="messages" />
     </div>
 </template>
 
@@ -41,60 +52,54 @@
                 isLoading: false,
                 errors   : [],
                 success  : null,
-                isSuccess : '',
-                showAlert : false,
-                messages : ''
+                isSuccess: '',
+                showAlert: false,
+                messages : '',
             };
         },
         methods: {
             async registerUser() {
-                let url        = this.url_api + '/register';
-                this.isLoading = true;
 
-                try {
-                    const response     = await axios.post(url, {email: this.email, name: this.name, password: this.password});
-                    const dataResponse = response.data;
-                    console.log('Response:', response.data);
+                console.log(123123123123);
+                // let url        = this.url_api + '/register';
+                // this.isLoading = true;
 
-                    if (dataResponse.status_code == 200) {
-                        this.messages  = "Register User Successfully !";
-                        this.isSuccess =  true;
-                    } else {
-                        console.log(dataResponse);
-                        this.isSuccess  =  false;
-                    }
+                // try {
+                //     const response     = await axios.post(url, {email: this.email, name: this.name, password: this.password});
+                //     const dataResponse = response.data;
+                //     console.log('Response:', response.data);
 
-                    this.name      = "";
-                    this.email     = "";
-                    this.password  = "";
-                    this.showAlert =  true
-                } catch (error) {
-                    console.error('Error:', error);
-                } finally {
-                    this.isLoading = false;
-                }
+                //     if (dataResponse.status_code == 200) {
+                //         this.messages  = "Register User Successfully !";
+                //         this.isSuccess =  true;
+                //     } else {
+                //         console.log(dataResponse);
+                //         this.isSuccess  =  false;
+                //     }
+
+                //     this.name      = "";
+                //     this.email     = "";
+                //     this.password  = "";
+                //     this.showAlert =  true
+                // } catch (error) {
+                //     console.error('Error:', error);
+                // } finally {
+                //     this.isLoading = false;
+                // }
             },
         },
     };
 </script>
-<style scoped>
-    .container {
-        font-family: 'Roboto', sans-serif;
-        background-color: #f0f4f8;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+<style>
+    .demo-login{
+        width: 400px;
+        margin: 0 auto !important;
     }
-
-    form {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 400px;
+    .demo-auto-login{
+        margin-bottom: 24px;
+        text-align: left;
+    }
+    .demo-auto-login a{
+        float: right;
     }
 </style>

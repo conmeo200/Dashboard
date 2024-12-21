@@ -70,17 +70,20 @@ const routes = [
     {
         name: 'permissions',
         path: '/permissions',
-        component: Permissions
+        component: Permissions,
+        meta : {requiresAuth : true}
     },
     {
         name: 'create-permission',
         path: '/create-permission',
-        component: CreatePermission
+        component: CreatePermission,
+        meta : {requiresAuth : true}
     },
     {
         name: 'permission-detail',
         path: '/permission/:id/detail',
-        component: PermissionDetail
+        component: PermissionDetail,
+        meta : {requiresAuth : true}
     },
     // End Route Permissions
 
@@ -88,17 +91,20 @@ const routes = [
     {
         name: 'roles',
         path: '/roles',
-        component: Roles
+        component: Roles,
+        meta : {requiresAuth : true}
     },
     {
         name: 'create-role',
         path: '/create-role',
-        component: CreateRole
+        component: CreateRole,
+        meta : {requiresAuth : true}
     },
     {
         name: 'role-detail',
         path: '/role/:id/detail',
-        component: RoleDetail
+        component: RoleDetail,
+        meta : {requiresAuth : true}
     },
     // End Route Roles
 
@@ -106,7 +112,8 @@ const routes = [
     {
         name: 'tags',
         path: '/tags',
-        component: tags
+        component: tags,
+        meta : {requiresAuth : true}
     },
     // End Route Tag
 
@@ -114,12 +121,14 @@ const routes = [
     {
         name: 'blogs',
         path: '/blogs',
-        component: blogs
+        component: blogs,
+        meta : {requiresAuth : true}
     },
     {
         name: 'blog_detail',
         path: '/blog/:id/detail',
-        component: blog_detail
+        component: blog_detail,
+        meta : {requiresAuth : true}
     },
     // End Route Blog
 
@@ -127,17 +136,20 @@ const routes = [
     {
         name: 'users',
         path: '/users',
-        component: Users
+        component: Users,
+        meta : {requiresAuth : true}
     },
     {
         name: 'create-user',
         path: '/create-user',
-        component: CreateUser
+        component: CreateUser,
+        meta : {requiresAuth : true}
     },
     {
         name: 'user-detail',
         path: '/user/:id/detail',
-        component: UserDetail
+        component: UserDetail,
+        meta : {requiresAuth : true}
     },
     // End Route User
 
@@ -145,17 +157,20 @@ const routes = [
     {
         name: 'products',
         path: '/products',
-        component: Products
+        component: Products,
+        meta : {requiresAuth : true}
     },
     {
         name: 'create-product',
         path: '/create-product',
-        component: CreateProduct
+        component: CreateProduct,
+        meta : {requiresAuth : true}
     },
     {
         name: 'product-detail',
         path: '/product/:id/detail',
-        component: ProductDetail
+        component: ProductDetail,
+        meta : {requiresAuth : true}
     },
     // End Route Products
 
@@ -163,17 +178,20 @@ const routes = [
     {
         name: 'orders',
         path: '/orders',
-        component: Orders
+        component: Orders,
+        meta : {requiresAuth : true}
     },
     {
         name: 'create-order',
         path: '/create-order',
-        component: CreateOrder
+        component: CreateOrder,
+        meta : {requiresAuth : true}
     },
     {
         name: 'order_detail',
         path: '/order/:id/detail',
-        component: OrderDetail
+        component: OrderDetail,
+        meta : {requiresAuth : true}
     }
     // End Route Orders
 ];
@@ -191,15 +209,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      const token = getCookie('token_name');  // Lấy token từ cookie
+        const token = getCookie('token_name'); 
   
-      if (!token) {
-        next({ name: 'Login' });  // Nếu không có token, điều hướng đến trang đăng nhập
-      } else {
-        next();  // Nếu có token, tiếp tục vào route
-      }
+        if (!token) next({ name: 'Login' });
+        else next();
     } else {
-      next();  // Nếu route không yêu cầu xác thực, tiếp tục bình thường
+        next();
     }
 });
 

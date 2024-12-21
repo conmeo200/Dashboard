@@ -18,7 +18,16 @@
 
             <br>
 
-            <Button @click="handleSubmit">Sign In</Button>
+            <div style="text-align: center">
+                <Button @click="handleSubmit" type="success" style="margin-right: 10px;">Sign In</Button>
+
+                <router-link :to="{ name: 'Register'}">
+                    <Button class="_btn _action_btn view_btn2" type="info">Sign Up</Button>
+                </router-link>
+                
+                <br>
+                <router-link :to="{name : 'Forgotpassword'}"> ForgotPassword </router-link>                
+            </div>
         </form>
     </div>
 </template>
