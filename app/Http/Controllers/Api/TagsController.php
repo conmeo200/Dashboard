@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Repositories\TagRepositores\TagRepositores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -19,6 +20,7 @@ class TagsController extends BaseApiController
 
     public function index(Request $request) 
     {        
+        dd(Auth::user());
         return $this->sendPaginationArrayResponse($this->tagRsp->getAllTags($request->all()));
     }
 

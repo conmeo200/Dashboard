@@ -54,7 +54,7 @@
                   <template #list>
                       <DropdownMenu>
                           <DropdownItem>Profile</DropdownItem>                      
-                          <DropdownItem>LogOut</DropdownItem>                      
+                          <DropdownItem @click="logout">LogOut</DropdownItem>                      
                       </DropdownMenu>
                   </template>
                 </Dropdown>
@@ -72,6 +72,7 @@
 
 <script>
 
+import { authState } from '../Auth/authState';
 export default {    
     data() {
         return {
@@ -81,6 +82,18 @@ export default {
     methods: {
         toggleDropdown() {
             this.isDropdownOpen = !this.isDropdownOpen;
+        },
+        async logout() {
+          const rsp = await this.callApi('POST', 'api/logout');
+
+          if (rsp && rsp.status == true) {
+            authState.isAuth = false;
+            localStorage.remove('isAuth');
+            
+            this.$router.push('/login');
+          } else {
+              this.error(rsp.messages);
+          }
         }
     }
 }

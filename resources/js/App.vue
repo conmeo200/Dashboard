@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <Menu v-if="isAuth"></Menu>
+      <Menu v-if="authState.isAuth"></Menu>
 
       <router-view />
     </div>
@@ -9,20 +9,15 @@
 </template>
 
 <script>
-import Login from "./components/Auth/Login.vue";
 import Menu from "./components/Generate/Menu.vue";
+import { authState } from './components/Auth/authState';
 
 export default {
-  components: { Login, Menu },
-  data() {
-      return {
-          isAuth: false
-      };
+  components: { Menu },
+  setup() {
+    return {
+      authState,
+    };
   },
-  methods: {
-    checkAuthentication() {
-      this.isAuth = document.cookie.includes('token_name');
-    },
-  }
 };
 </script>

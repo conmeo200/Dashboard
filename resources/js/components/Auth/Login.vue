@@ -32,21 +32,29 @@
     </div>
 </template>
 <script>
+import { authState } from './authState';
+
     export default {
         data () {
             return {
                 autoLogin: true,
                 formLogin: {
-                    email   : '',
-                    password: '',
+                    email   : 'test1@gmail.com',
+                    password: '123123',
                 }
             }
         },
 
         methods: {
             async handleSubmit() {
-                const rsp = await this.callApi('POST', 'api/login', this.formLogin, true);
-                console.log(rsp); return;
+                const rsp = await this.callApi('POST', 'api/login', this.formLogin);
+                if (rsp && rsp.success == true) {
+                    localStorage.setItem('isAuth', 'true');
+                    authState.isAuth = true;
+                    this.$router.push('/');
+                } else {
+                    this.error(rsp.messages);
+                }
             }
         }
     }

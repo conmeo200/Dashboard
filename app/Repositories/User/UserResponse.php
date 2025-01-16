@@ -29,5 +29,16 @@ class UserResponse extends BaseRepository
     {
         return parent::getByColumn($email, 'email');
     }
+
+    public function updateUser($data)
+    {
+        $exitEmail = $this->findFirstUserByEmail($data['email']);
+
+        if (!$exitEmail) return false;
+        
+        $data['password'] = Hash::make($data['password']);
+
+        return User::where('email', $data['email'])->update($data);
+    }
 }
 

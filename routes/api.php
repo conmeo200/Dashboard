@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PermissonsController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\PayPalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,71 +24,78 @@ use App\Http\Controllers\Api\RoleController;
 
 // Auth
 Route::post('/register', [AuthController::class, 'handleRegister']);
-Route::post('/login', [AuthController::class, 'handleLogin']);
+Route::post('/login', [AuthController::class, 'handleLogin'])->name('login');
 
-Route::group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'handleLogout']);
+
+    // Paypal 
+
+    Route::prefix('paypal')->group(function () {
+        Route::post('create-payment', [PayPalController::class, 'createPayment']);
+        Route::post('execute-payment', [PayPalController::class, 'executePayment']);
+    });
+
+    // Permissions
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('/', [PermissonsController::class, 'index']);
+        Route::post('/create', [PermissonsController::class, 'create']);
+        Route::get('/{id}', [PermissonsController::class, 'detail']);
+        Route::post('/{id}', [PermissonsController::class, 'update']);
+        Route::delete('/{id}', [PermissonsController::class, 'delete']);
+    });
+    // End Permissions
+
+    // Roles
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/', [RoleController::class, 'index']);
+        Route::post('/create', [RoleController::class, 'create']);
+        Route::get('/{id}', [RoleController::class, 'detail']);
+        Route::post('/{id}', [RoleController::class, 'update']);
+        Route::delete('/{id}', [RoleController::class, 'delete']);
+    });
+    // End Roles
+
+    // Page
+    Route::group(['prefix' => 'tag'], function () {
+        Route::get('/', [TagsController::class, 'index']);
+        Route::post('/create', [TagsController::class, 'create']);
+        Route::get('/{id}', [TagsController::class, 'detail']);
+        Route::post('/{id}', [TagsController::class, 'update']);
+        Route::delete('/{id}', [TagsController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'blog'], function () {
+        Route::get('/', [BlogController::class, 'index']);
+        Route::post('/create', [BlogController::class, 'create']);
+        Route::get('/{id}', [BlogController::class, 'detail']);
+        Route::post('/{id}', [BlogController::class, 'update']);
+        Route::delete('/{id}', [BlogController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/create', [UserController::class, 'create']);
+        Route::get('/{id}', [UserController::class, 'detail']);
+        Route::post('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'product'], function () {
+        Route::get('/', [ProductController::class, 'index']);
+        Route::post('/create', [ProductController::class, 'create']);
+        Route::get('/{id}', [ProductController::class, 'detail']);
+        Route::post('/{id}', [ProductController::class, 'update']);
+        Route::delete('/{id}', [ProductController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/', [OrderController::class, 'index']);
+        Route::post('/create', [OrderController::class, 'create']);
+        Route::get('/{id}', [OrderController::class, 'detail']);
+        Route::post('/{id}', [OrderController::class, 'update']);
+        Route::delete('/{id}', [OrderController::class, 'delete']);
+    });
+    // End Page
 });
 // End Auth
-
-// Permissions
-Route::group(['prefix' => 'permission'], function () {
-    Route::get('/', [PermissonsController::class, 'index']);
-    Route::post('/create', [PermissonsController::class, 'create']);
-    Route::get('/{id}', [PermissonsController::class, 'detail']);
-    Route::post('/{id}', [PermissonsController::class, 'update']);
-    Route::delete('/{id}', [PermissonsController::class, 'delete']);
-});
-// End Permissions
-
-// Roles
-Route::group(['prefix' => 'role'], function () {
-    Route::get('/', [RoleController::class, 'index']);
-    Route::post('/create', [RoleController::class, 'create']);
-    Route::get('/{id}', [RoleController::class, 'detail']);
-    Route::post('/{id}', [RoleController::class, 'update']);
-    Route::delete('/{id}', [RoleController::class, 'delete']);
-});
-// End Roles
-
-// Page
-Route::group(['prefix' => 'tag'], function () {
-    Route::get('/', [TagsController::class, 'index']);
-    Route::post('/create', [TagsController::class, 'create']);
-    Route::get('/{id}', [TagsController::class, 'detail']);
-    Route::post('/{id}', [TagsController::class, 'update']);
-    Route::delete('/{id}', [TagsController::class, 'delete']);
-});
-
-Route::group(['prefix' => 'blog'], function () {
-    Route::get('/', [BlogController::class, 'index']);
-    Route::post('/create', [BlogController::class, 'create']);
-    Route::get('/{id}', [BlogController::class, 'detail']);
-    Route::post('/{id}', [BlogController::class, 'update']);
-    Route::delete('/{id}', [BlogController::class, 'delete']);
-});
-
-Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [UserController::class, 'index']);
-    Route::post('/create', [UserController::class, 'create']);
-    Route::get('/{id}', [UserController::class, 'detail']);
-    Route::post('/{id}', [UserController::class, 'update']);
-    Route::delete('/{id}', [UserController::class, 'delete']);
-});
-
-Route::group(['prefix' => 'product'], function () {
-    Route::get('/', [ProductController::class, 'index']);
-    Route::post('/create', [ProductController::class, 'create']);
-    Route::get('/{id}', [ProductController::class, 'detail']);
-    Route::post('/{id}', [ProductController::class, 'update']);
-    Route::delete('/{id}', [ProductController::class, 'delete']);
-});
-
-Route::group(['prefix' => 'order'], function () {
-    Route::get('/', [OrderController::class, 'index']);
-    Route::post('/create', [OrderController::class, 'create']);
-    Route::get('/{id}', [OrderController::class, 'detail']);
-    Route::post('/{id}', [OrderController::class, 'update']);
-    Route::delete('/{id}', [OrderController::class, 'delete']);
-});
-// End Page

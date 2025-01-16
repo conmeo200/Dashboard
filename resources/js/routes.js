@@ -196,26 +196,20 @@ const routes = [
     // End Route Orders
 ];
   
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
-  
 const router = createRouter({
     history: createWebHistory(),
     routes
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        const token = getCookie('token_name'); 
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         const token = localStorage.getItem('isAuth'); 
   
-        if (!token) next({ name: 'Login' });
-        else next();
-    } else {
-        next();
-    }
-});
+//         if (!token) next({ name: 'Login' });
+//         else next();
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;
