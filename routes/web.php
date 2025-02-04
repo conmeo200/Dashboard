@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Repositories\LogsRepositories\Logs;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
@@ -20,8 +21,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/test-components', function () {
-    return view('pdf_view');
+Route::get('/test-connection-rabbitmq', function () {
+    dispatch(new \App\Jobs\TestRabbitMQJob(['status' => 200]));
+
+    return 'Job has been dispatched!';
+
 });
 
 Route::get('/test-mysql', function () {

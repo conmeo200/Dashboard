@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class CacheProductsJob implements ShouldQueue
@@ -43,7 +44,7 @@ class CacheProductsJob implements ShouldQueue
             Redis::expire('your_data_key', 3600);
         } catch (\Exception $e) {
             // Xử lý lỗi (ví dụ: ghi log hoặc thông báo)
-            \Log::error('Failed to cache data: ' . $e->getMessage());
+            Log::error('Failed to cache data: ' . $e->getMessage());
         }
     }
 }

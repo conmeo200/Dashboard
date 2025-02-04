@@ -19,7 +19,8 @@
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^4.0",
         "stripe/stripe-php": "^14.10",
-        "twilio/sdk": "^8.2"
+        "twilio/sdk": "^8.2",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "^11.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

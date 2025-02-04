@@ -73,21 +73,54 @@ return [
 
         'rabbitmq' => [
             'driver'   => 'rabbitmq',
-            'host'     => env('RABBITMQ_HOST', '127.0.0.1'),
+            'host'     => env('RABBITMQ_HOST', 'rabbitmq'),
             'port'     => env('RABBITMQ_PORT', 5672),
             'vhost'    => env('RABBITMQ_VHOST', '/'),
             'login'    => env('RABBITMQ_LOGIN', 'guest'),
             'password' => env('RABBITMQ_PASSWORD', 'guest'),
-            'queue'    => env('RABBITMQ_QUEUE', 'default'),
             'options'  => [
                 'exchange' => [
-                    'name'        => env('RABBITMQ_EXCHANGE_NAME', null),
-                    'declare'     => env('RABBITMQ_EXCHANGE_DECLARE', true),
-                    'type'        => env('RABBITMQ_EXCHANGE_TYPE', 'direct'),
-                    'passive'     => env('RABBITMQ_EXCHANGE_PASSIVE', false),
-                    'durable'     => env('RABBITMQ_EXCHANGE_DURABLE', true),
-                    'auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false),
-                    'arguments'   => env('RABBITMQ_EXCHANGE_ARGUMENTS', null),
+                    // Exchange 1: Orders
+                    'orders' => [
+                        'name'        => env('RABBITMQ_EXCHANGE_ORDERS_NAME', 'orders_exchange'),
+                        'type'        => env('RABBITMQ_EXCHANGE_ORDERS_TYPE', 'direct'),
+                        'declare'     => env('RABBITMQ_EXCHANGE_ORDERS_DECLARE', true),
+                        'durable'     => env('RABBITMQ_EXCHANGE_ORDERS_DURABLE', true),
+                        'auto_delete' => env('RABBITMQ_EXCHANGE_ORDERS_AUTODELETE', false),
+                    ],
+                    // Exchange 2: Notifications
+                    'notifications' => [
+                        'name'        => env('RABBITMQ_EXCHANGE_NOTIFICATIONS_NAME', 'notifications_exchange'),
+                        'type'        => env('RABBITMQ_EXCHANGE_NOTIFICATIONS_TYPE', 'topic'),
+                        'declare'     => env('RABBITMQ_EXCHANGE_NOTIFICATIONS_DECLARE', true),
+                        'durable'     => env('RABBITMQ_EXCHANGE_NOTIFICATIONS_DURABLE', true),
+                        'auto_delete' => env('RABBITMQ_EXCHANGE_NOTIFICATIONS_AUTODELETE', false),
+                    ],
+                    // Exchange 3: Emails
+                    'emails' => [
+                        'name'        => env('RABBITMQ_EXCHANGE_EMAILS_NAME', 'emails_exchange'),
+                        'type'        => env('RABBITMQ_EXCHANGE_EMAILS_TYPE', 'fanout'),
+                        'declare'     => env('RABBITMQ_EXCHANGE_EMAILS_DECLARE', true),
+                        'durable'     => env('RABBITMQ_EXCHANGE_EMAILS_DURABLE', true),
+                        'auto_delete' => env('RABBITMQ_EXCHANGE_EMAILS_AUTODELETE', false),
+                    ],
+                ],
+                'queue' => [
+                    // Queue 1: Orders Queue
+                    'orders' => [
+                        'name'        => env('RABBITMQ_QUEUE_ORDERS_NAME', 'order_queue'),
+                        'binding_key' => env('RABBITMQ_QUEUE_ORDERS_BINDING_KEY', 'order.process'),
+                    ],
+                    // Queue 2: Notifications Queue
+                    'notifications' => [
+                        'name'        => env('RABBITMQ_QUEUE_NOTIFICATIONS_NAME', 'notification_queue'),
+                        'binding_key' => env('RABBITMQ_QUEUE_NOTIFICATIONS_BINDING_KEY', 'notification.*'),
+                    ],
+                    // Queue 3: Emails Queue
+                    'emails' => [
+                        'name'        => env('RABBITMQ_QUEUE_EMAILS_NAME', 'email_queue'),
+                        'binding_key' => env('RABBITMQ_QUEUE_EMAILS_BINDING_KEY', 'email.send'),
+                    ],
                 ],
             ],
         ],

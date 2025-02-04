@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PermissonsController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PayPalController;
+use App\Http\Controllers\NoticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ use App\Http\Controllers\Api\PayPalController;
 // Auth
 Route::post('/register', [AuthController::class, 'handleRegister']);
 Route::post('/login', [AuthController::class, 'handleLogin'])->name('login');
+Route::get('/test-notication', [NoticationController::class, 'index'])->name('index');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'handleLogout']);

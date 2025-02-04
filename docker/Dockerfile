@@ -14,9 +14,9 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libssl-dev \
     curl \
-    nano \ 
+    nano \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip intl pdo pdo_mysql xsl
+    && docker-php-ext-install gd zip intl pdo pdo_mysql xsl sockets
 
 # Cài đặt các extension PHP
 RUN pecl install redis mongodb \
