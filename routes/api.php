@@ -26,7 +26,7 @@ use App\Http\Controllers\NoticationController;
 // Auth
 Route::post('/register', [AuthController::class, 'handleRegister']);
 Route::post('/login', [AuthController::class, 'handleLogin'])->name('login');
-Route::get('/test-notication', [NoticationController::class, 'index'])->name('index');
+Route::post('/test-notication', [NoticationController::class, 'createOrder']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'handleLogout']);

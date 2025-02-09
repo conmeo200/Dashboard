@@ -1,9 +1,13 @@
 <?php
 
+use App\Jobs\EmailJob;
+use App\Jobs\NoticationsJob;
+use App\Jobs\OrdersJob;
 use App\Models\MongoDB\LogActivity;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\LogsRepositories\Logs;
+use App\Service\RabbitmqService\RabbitMQService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,10 +26,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/test-connection-rabbitmq', function () {
-    dispatch(new \App\Jobs\TestRabbitMQJob(['status' => 200]));
+    //dispatch(new \App\Jobs\OrdersJob(['order_id' => 200, 'product_name' => 'Product A']))->onQueue('email_queue');
 
-    return 'Job has been dispatched!';
+    $rmq = new RabbitMQService();
 
+    // Create Exchange
+    //$rmq->createExchange('order_exchange', 'direct'); // Hoặc 'fanout', 'topic'
+
+    // Binding Queue To Exchange
+    // $rmq->createQueue('order_queue');
+    // $rmq->bindQueueToExchange('order_queue', 'order_exchange', 'order.created');
+
+    // Send Message to Exchange
+    $rmq->publishMessage('order_exchange', 'order.created', ['order_id' => 123, 'status' => 'pending']);
+
+    $rmq->close();
 });
 
 Route::get('/test-mysql', function () {

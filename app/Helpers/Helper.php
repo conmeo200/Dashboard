@@ -7,6 +7,7 @@ if (!function_exists('LogError')) {
     function LogError($action, $messages, $line, $file)
     {
         Log::error("API File : {$file}, Action : {$action}, Line : {$line}, Error : {$messages}");
+        // Log::info('Sanctum Middleware: Request received', ['url' => $request->url(), 'headers' => $request->headers->all()]);
     }
 }
 
