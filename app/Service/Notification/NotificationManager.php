@@ -4,18 +4,17 @@ namespace App\Service\Notification;
 use App\Repositories\Notification\EmailService;
 use App\Repositories\Notification\NotificationInterface;
 use App\Repositories\Notification\SMSService;
-use Exception;
+use App\Service\RabbitmqService\RabbitMQService;
+
 
 class NotificationManager 
 {
-    public static function factory($serviceType)
-    {
-        if ($serviceType == 'email') {
-            return EmailService::getInstance();
-        } elseif ($serviceType == 'sms') {
-            return SMSService::getInstance();
-        }
+    public $queue_name    = 'notication_queue';
+    public $exchange_name = 'notication_exchange';
 
-        throw new Exception("Invalid service type");
+    public function sendSevice($data)
+    {
+        $service = app(RabbitMQService::class);
+        $service->publishMessage($this->exchange_name, '', $data);
     }
 }

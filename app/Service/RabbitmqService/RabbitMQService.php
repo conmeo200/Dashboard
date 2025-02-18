@@ -17,7 +17,7 @@ class RabbitMQService
     {
         try {
             $this->connection = new AMQPStreamConnection(
-                env('RABBITMQ_HOST', '127.0.0.1'),
+                env('RABBITMQ_HOST', 'rabbitmq'),
                 env('RABBITMQ_PORT', 5672),
                 env('RABBITMQ_USER', 'guest'),
                 env('RABBITMQ_PASSWORD', 'guest')
@@ -52,9 +52,9 @@ class RabbitMQService
         Log::info("Queue '$queueName' created successfully");
     }
 
-    public function bindQueueToExchange(string $queueName, string $exchangeName, string $routingKey): void
+    public function bindQueueToExchange(string $queueName, string $exchangeName, string $routingKey = ''): void
     {
-        if (empty($queueName) || empty($exchangeName) || empty($routingKey)) {
+        if (empty($queueName) || empty($exchangeName)) {
             throw new Exception("Queue, Exchange, and Routing Key cannot be empty");
         }
 
@@ -63,10 +63,10 @@ class RabbitMQService
         Log::info("Queue '$queueName' bound to Exchange '$exchangeName' with Routing Key '$routingKey'");
     }
 
-    public function publishMessage(string $exchange, string $routingKey, array $data): void
+    public function publishMessage(string $exchange, string $routingKey = '', array $data): void
     {
-        if (empty($exchange) || empty($routingKey)) {
-            throw new Exception("Exchange and Routing Key cannot be empty");
+        if (empty($exchange)) {
+            throw new Exception("Exchange cannot be empty");
         }
 
         $message = new AMQPMessage(json_encode($data), [
@@ -76,10 +76,13 @@ class RabbitMQService
         $this->channel->basic_publish($message, $exchange, $routingKey);
 
         Log::info("Message sent to Exchange: $exchange - RoutingKey: $routingKey");
+
+        echo "Message sent to Exchange: $exchange - RoutingKey: $routingKey";
     }
 
     public function listen(string $queueName): void
     {
+        //dd($queueName);
         if (empty($queueName)) {
             throw new Exception("Queue name cannot be empty");
         }
@@ -87,16 +90,29 @@ class RabbitMQService
         $this->channel->queue_declare($queueName, false, true, false, false);
 
         Log::info("Waiting for messages in $queueName...");
+    }
 
-        $callback = function ($msg) {
-            Log::info("Received: " . $msg->body);
+    public function close(): void
+    {
+        $this->channel->close();
+        $this->connection->close();
+    }
+
+    public function consumerNotication($queueName)
+    {
+        $this->listen($queueName);
+
+        $callback = function ($msg) use($queueName){
+            Log::info("Consumer Notication Received: " . $msg->body);
             
             // Xử lý message tại đây
             try {
                 // TODO: Viết logic xử lý message
+                echo "Consumer Notication: " . $msg->body . "\n";
+                
                 $msg->ack();
             } catch (Exception $exception) {
-                Log::error("Failed to process message: " . $exception->getMessage());
+                Log::error("Failed to process message: " . $exception->getMessage() . ", by queue {$queueName}");
                 $msg->nack(); // Reject message, có thể gửi lại queue
             }
         };
@@ -108,9 +124,41 @@ class RabbitMQService
         }
     }
 
-    public function close(): void
+    public function consumerOrder($queueName)
     {
-        $this->channel->close();
-        $this->connection->close();
+        $this->listen($queueName);
+
+        $callback = function ($msg) use($queueName){
+            Log::info("Consumer Order Received: " . $msg->body);
+            
+            // Xử lý message tại đây
+            try {
+                // TODO: Viết logic xử lý message
+                echo "Consumer Order: " . $msg->body . "\n";
+                
+                $msg->ack();
+            } catch (Exception $exception) {
+                Log::error("Failed to process message: " . $exception->getMessage() . ", by queue {$queueName}");
+                $msg->nack(); // Reject message, có thể gửi lại queue
+            }
+        };
+
+        $this->channel->basic_consume($queueName, '', false, false, false, false, $callback);
+
+        while ($this->channel->is_consuming()) {
+            $this->channel->wait();
+        }
+    }
+
+    public function managerConsumer($queueName)
+    {
+        switch ($queueName) {
+            case 'notication_queue':
+                $this->consumerNotication($queueName);
+                break;
+            case 'order_queue':
+                $this->consumerOrder($queueName);
+                break;
+        }    
     }
 }

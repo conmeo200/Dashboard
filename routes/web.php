@@ -7,6 +7,7 @@ use App\Models\MongoDB\LogActivity;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\LogsRepositories\Logs;
+use App\Service\Notification\NotificationManager;
 use App\Service\RabbitmqService\RabbitMQService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/test-connection-rabbitmq', function () {
+Route::get('/comsumer-order', function () {
     //dispatch(new \App\Jobs\OrdersJob(['order_id' => 200, 'product_name' => 'Product A']))->onQueue('email_queue');
 
     $rmq = new RabbitMQService();
@@ -38,9 +39,15 @@ Route::get('/test-connection-rabbitmq', function () {
     // $rmq->bindQueueToExchange('order_queue', 'order_exchange', 'order.created');
 
     // Send Message to Exchange
-    $rmq->publishMessage('order_exchange', 'order.created', ['order_id' => 123, 'status' => 'pending']);
-
+     $rmq->publishMessage('order_exchange', 'order.created', ['order_id' => 123, 'status' => 'pending']);
+    
     $rmq->close();
+});
+Route::get('/comsumer-notication', function () {
+    $notication = new NotificationManager();
+    $notication->sendSevice(['notication_messages' => 'Ban co 1 don hang']);
+
+    echo 'lUM';
 });
 
 Route::get('/test-mysql', function () {

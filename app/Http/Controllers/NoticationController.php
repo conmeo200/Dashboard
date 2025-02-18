@@ -34,9 +34,6 @@ class NoticationController extends BaseApiController
             $dataPost             = $validator->validated();
             $dataPost['order_id'] = random_int(1, 1000);
 
-            dispatch(new OrdersJob($dataPost))->onQueue('order_queue');
-            dispatch(new EmailJob($dataPost))->onQueue('email_queue');
-            dispatch(new NoticationsJob($dataPost))->onQueue('notification_queue');
 
             return $this->sendResponse([                
                 'messages' => "Create Order ID {$dataPost['order_id']} Success."

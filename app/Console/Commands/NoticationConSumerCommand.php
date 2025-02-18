@@ -4,24 +4,24 @@ namespace App\Console\Commands;
 
 use App\Service\RabbitmqService\RabbitMQService;
 use Illuminate\Console\Command;
-use Enqueue\AmqpBunny\AmqpContext;
 use Illuminate\Support\Facades\Log;
 
-class ConsumeRabbitMQ extends Command
+class NoticationConSumerCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'rabbitmq:consume-all';
+    protected $signature = 'rabbitmq:notication-comsumer';
 
+    protected $queue_name = "notication_queue";
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Consume messages from RabbitMQ';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -39,17 +39,10 @@ class ConsumeRabbitMQ extends Command
      * @return int
      */
     public function handle()
-    {        
+    {
         try { 
-            $listQueue = ['order_queue', 'notication_queue'];
-
             $consumer = new RabbitMQService();
-
-            foreach($listQueue as $queue) {
-                $consumer->managerConsumer($queue);
-            }
-
-            $this->info("All consumers started in background.");
+            $consumer->consumerNotication($this->queue_name);
         } catch (\Exception $exception){
             Log::error("Error ConsumeRabbitMQ : {$exception->getMessage()}");
         }
