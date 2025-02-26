@@ -19,26 +19,18 @@ class RoleSeeder extends Seeder
             [
                 'name'       => 'Admin',
                 'guard_name' => 'Admin',
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'name'       => 'Developer',
                 'guard_name' => 'Developer',
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'name'       => 'MKT',
                 'guard_name' => 'MKT',
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'name'       => 'User',
                 'guard_name' => 'User',
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
         ];
 

@@ -8,7 +8,7 @@ class LogActivity extends Eloquent
 {
     protected $connection = 'mongodb';
     protected $collection = 'logs';
-    protected $fillable   = ['name', 'email'];
+    // protected $fillable   = ['name', 'email'];
     private static $instance = [];
 
     public static function getInstance()
