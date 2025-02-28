@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PermissonsController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PayPalController;
+use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\NoticationController;
 
 /*
@@ -27,9 +28,14 @@ use App\Http\Controllers\NoticationController;
 Route::post('/register', [AuthController::class, 'handleRegister']);
 Route::post('/login', [AuthController::class, 'handleLogin'])->name('login');
 Route::post('/test-notication', [NoticationController::class, 'createOrder']);
+//Init 
+Route::get('/menus', [MenuController::class, 'initMenu']);
+//End
+Route::middleware(['auth:sanctum', 'check.role'])->group(function () {
 
-Route::middleware(['auth:sanctum'])->group(function () {
+    // Log out
     Route::post('/logout', [AuthController::class, 'handleLogout']);
+    // End
 
     // Paypal 
 
@@ -49,13 +55,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // End Permissions
 
     // Roles
-    Route::group(['prefix' => 'role'], function () {
-        Route::get('/', [RoleController::class, 'index']);
-        Route::post('/create', [RoleController::class, 'create']);
+    Route::group(['prefix' => 'role', 'middleware' => ['permission:view roles,api']], function () {
+        Route::get('/', [RoleController::class, 'index']); // Không cần middleware lặp lại
+        Route::post('/create', [RoleController::class, 'create'])->middleware('permission:create roles,api');
         Route::get('/{id}', [RoleController::class, 'detail']);
-        Route::post('/{id}', [RoleController::class, 'update']);
-        Route::delete('/{id}', [RoleController::class, 'delete']);
+        Route::post('/{id}', [RoleController::class, 'update'])->middleware('permission:update roles,api');
+        Route::delete('/{id}', [RoleController::class, 'delete'])->middleware('permission:delete roles,api');
     });
+    
     // End Roles
 
     // Page

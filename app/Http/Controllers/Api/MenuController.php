@@ -3,29 +3,41 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseApiController;
-use App\Repositories\RoleRepositories\RspRole;
+use App\Models\MenuModel;
+use App\Models\Role as ModelsRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends BaseApiController
+class MenuController extends BaseApiController
 {
-    public function index()
+    public function initMenu()
     {
-        return $this->sendResponse(Role::all()->toArray());
-    }
+        $user     = Auth::guard('api')->user();
+        $listMenu = [];
 
-    public function detail($id)
-    {
-        if (empty($id) || (!empty($id) && !is_numeric($id))) return $this->sendError('ID invalid');
+        if (!$user) {
+            $listMenu = MenuModel::query()->where(['type' => 'public', 'active' => 'Y']);                        ;
+        } else {
+            $roleName = $user->getRoleNames()->first();
+            
+            if (empty($roleName)) {
+                return $this->sendResponse($listMenu);
+            }
 
-        $model = Role::with('permissions')->where(['id' => $id])->first();
+            $listMenu = ModelsRole::query()                
+                ->where(['name' => $roleName])
+                ->with('menus', function ($menus) {
+                    $menus->select(['id', 'parent_id', 'name', 'keyword', 'icon', 'order', 'active']);
+                    $menus->where(['active' => 'Y']);
+                })
+                ->select(['id', 'name']);
+        }
 
-        if (!$model) return $this->sendError('Role Not Found');
-
-        return $this->sendResponse(collect($model)->toArray());
+        return $this->sendResponse($listMenu->get()->toArray());
     }
 
     public function create(Request $request)
@@ -35,7 +47,7 @@ class RoleController extends BaseApiController
         try {
             $validator = Validator::make($request->all(), [
                 'name'       => ['required', 'unique:Roles,name', 'string', 'min:6', 'max:255'],
-                'guard_name' => ['required', 'string'],
+                'key_word' => ['required', 'string'],
             ]);
 
             if ($validator->fails()) {

@@ -35,15 +35,10 @@ class PermissionSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'admin']);
         $adminRole->syncPermissions($permissions);
 
-        // Tạo role user và chỉ gán một số permissions
-        $userRole        = Role::firstOrCreate(['name' => 'user']);
-        $userPermissions = ['view users', 'view roles', 'view permissions'];
+        // // Tạo role user và chỉ gán một số permissions
+        // $userRole        = Role::firstOrCreate(['name' => 'user']);
+        // $userPermissions = ['view users', 'view roles', 'view permissions'];
 
-        $userRole->syncPermissions($userPermissions);
-
-        // Gán role admin cho user đầu tiên (nếu có)
-        if ($adminUser) {
-            $adminUser->assignRole('admin');
-        }
+        // $userRole->syncPermissions($userPermissions);
     }
 }

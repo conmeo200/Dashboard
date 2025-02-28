@@ -14,7 +14,7 @@ class PermissonsController extends BaseApiController
     public function index()
     {
         $rspRole = new RspRole();
-        dd($rspRole->checkRolePermissionByUserID(1, 'admin'));
+        // dd($rspRole->checkRolePermissionByUserID(1, 'admin'));
         return $this->sendResponse(Permission::all()->toArray());
     }
 
@@ -23,7 +23,7 @@ class PermissonsController extends BaseApiController
         if (empty($id) || (!empty($id) && !is_numeric($id))) return $this->sendError('ID invalid');
 
         $model = Permission::query()->where(['id' => $id])->first();
-
+dd($model);
         if (!$model) return $this->sendError('Permission Not Found');
 
         return $this->sendResponse($model);

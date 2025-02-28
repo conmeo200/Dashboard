@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Role extends Model
 {
@@ -19,4 +20,9 @@ class Role extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function menus() 
+    {
+        return $this->belongsToMany(MenuModel::class, 'menu_roles', 'role_id', 'menu_id');
+    }
 }
