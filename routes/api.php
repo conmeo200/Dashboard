@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\PermissonsController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PayPalController;
 use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\CustomersController;
 use App\Http\Controllers\NoticationController;
 
 /*
@@ -32,7 +33,6 @@ Route::post('/test-notication', [NoticationController::class, 'createOrder']);
 Route::get('/menus', [MenuController::class, 'initMenu']);
 //End
 Route::middleware(['auth:sanctum', 'check.role'])->group(function () {
-
     // Log out
     Route::post('/logout', [AuthController::class, 'handleLogout']);
     // End
@@ -53,6 +53,16 @@ Route::middleware(['auth:sanctum', 'check.role'])->group(function () {
         Route::delete('/{id}', [PermissonsController::class, 'delete']);
     });
     // End Permissions
+
+    // Customers
+    Route::group(['prefix' => 'customer'], function () {
+        Route::get('/', [CustomersController::class, 'index']);
+        Route::post('/create', [CustomersController::class, 'create']);
+        Route::get('/{id}', [CustomersController::class, 'detail']);
+        Route::post('/{id}', [CustomersController::class, 'update']);
+        Route::delete('/{id}', [CustomersController::class, 'delete']);
+    });
+    // End Customers
 
     // Roles
     Route::group(['prefix' => 'role', 'middleware' => ['permission:view roles,api']], function () {

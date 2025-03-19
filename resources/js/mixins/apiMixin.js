@@ -3,7 +3,7 @@ import axios from "axios";
 export default {
     data() {
         return {
-           prefix_url: 'http://localhost/'
+           prefix_url: 'http://localhost.nginx/'
        }  
     },
     methods: {
