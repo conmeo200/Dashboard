@@ -44,6 +44,11 @@ Route::middleware(['auth:sanctum', 'check.role'])->group(function () {
         Route::post('execute-payment', [PayPalController::class, 'executePayment']);
     });
 
+    Route::prefix('payment')->group(function () {
+        Route::post('success', [PayPalController::class, 'createPayment']);
+        Route::post('cancel', [PayPalController::class, 'executePayment']);
+    });
+
     // Permissions
     Route::group(['prefix' => 'permission'], function () {
         Route::get('/', [PermissonsController::class, 'index']);

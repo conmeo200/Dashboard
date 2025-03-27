@@ -37,7 +37,38 @@ import Permissions      from "./components/Permissions/Permissions.vue";
 import PermissionDetail from "./components/Permissions/PermissionDetail.vue";
 import CreatePermission from "./components/Permissions/CreatePermission.vue";
 
+// component paypal
+import Payments      from "./components/PayPal/List.vue";
+import Cancel        from "./components/PayPal/Cancel.vue";
+import Success       from "./components/PayPal/Success.vue";
+import CreatePayment from "./components/PayPal/Create.vue";
+
 const routes = [
+    
+    // Route Payments
+    {
+        name: 'Payments',
+        path: '/payments',
+        component: Payments,
+    },
+    {
+        name: 'Payment Cancel',
+        path: '/payment-cancel',
+        component: Cancel,
+    },
+    {
+        name: 'Payment Success',
+        path: '/payment-success',
+        component: Success,
+    },
+    {
+        name: 'Create Payment',
+        path: '/create-payment',
+        component: CreatePayment,
+    },
+
+    // End Route Payments
+
     // Route Auth
     {
         name: 'Login',
@@ -56,7 +87,6 @@ const routes = [
     },
 
     // End Route Auth
-    
     // Route Home
     {
         name: 'home',

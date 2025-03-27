@@ -30,12 +30,6 @@ class OrderController extends BaseApiController
     
     public function create(Request $request) 
     {
-        $validator = Validator::make(
-            $request->all(), 
-            [
-                'user_id'    =>  ['required', 'numberic', Rule::exit(User::query()->select('id')->get()->toArray())],
-                'product_id' =>  ['required', 'numberic', Rule::exit(Product::query()->select('id')->get()->toArray())],
-            ]
-        );
+        dd(12312313);
     }
 }

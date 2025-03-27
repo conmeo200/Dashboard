@@ -28,21 +28,21 @@ class PayPalController extends BaseApiController
                 'description' => 'required|string',
             ]);
             
-            if ($validator->fails()) {
-                return $this->sendError($validator->errors()->toArray());
-            }
+            // if ($validator->fails()) {
+            //     return $this->sendError($validator->errors()->toArray());
+            // }
 
             $dataPost = $validator->validated();
 
-            $total        = $dataPost['total'];
-            $currency     = $dataPost['currency'];
-            $description  = $dataPost['description'];
-            $returnUrl    = config('app.url') . '/api/payment/success';
-            $cancelUrl    = config('app.url') . '/api/payment/cancel';
+            $total        = $dataPost['total'] ?? 10;
+            $currency     = $dataPost['currency'] ?? 'USD';
+            $description  = $dataPost['description'] ?? 'tEST cURRENCY';
+            $returnUrl    = config('app.url') . 'payment-success';
+            $cancelUrl    = config('app.url') . 'payment-cancel';
 
-            $approvalLink = $this->paypalService->createPayment($total, $currency, $description, $returnUrl, $cancelUrl);
-        dd($approvalLink);
-            return response()->json(['approval_url' => $approvalLink], 200);
+            $dataRespone = $this->paypalService->createPayment($total, $currency, $description, $returnUrl, $cancelUrl);        
+
+            return $this->sendResponse($dataRespone);
         } catch (\Exception $e) {
             Log::error("Create Payment Error : {$e->getMessage()}");
 
@@ -70,4 +70,7 @@ class PayPalController extends BaseApiController
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function cancel(Request $request) {Log::info(json_encode("Payment Cancel , data respone" . $request->all()));}
+    public function success(Request $request) {Log::info(json_encode("Payment Success , data respone" . $request->all()));}
 }

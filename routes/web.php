@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\PayPalController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +27,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::prefix('paypal')->group(function () {
+    Route::get('create-payment', [PayPalController::class, 'createPayment']);
+    Route::post('execute-payment', [PayPalController::class, 'executePayment']);
+});
 
 Route::get('/comsumer-order', function () {
     //dispatch(new \App\Jobs\OrdersJob(['order_id' => 200, 'product_name' => 'Product A']))->onQueue('email_queue');
