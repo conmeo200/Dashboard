@@ -14,7 +14,7 @@ class ConsumeRabbitMQ extends Command
      *
      * @var string
      */
-    protected $signature = 'rabbitmq:consume-all';
+    protected $signature = 'rabbitmq:order_queue';
 
     /**
      * The console command description.
@@ -41,17 +41,13 @@ class ConsumeRabbitMQ extends Command
     public function handle()
     {        
         try { 
-            $listQueue = ['order_queue', 'notication_queue'];
+            $rabbitmqService = new RabbitMQService();
+            $rabbitmqService->consumerOrder('order_queue');
+            $rabbitmqService->close();
 
-            $consumer = new RabbitMQService();
-
-            foreach($listQueue as $queue) {
-                $consumer->managerConsumer($queue);
-            }
-
-            $this->info("All consumers started in background.");
+            $this->info("Queue Order Success");
         } catch (\Exception $exception){
-            Log::error("Error ConsumeRabbitMQ : {$exception->getMessage()}");
+            Log::error("Queue Order Error ConsumeRabbitMQ : {$exception->getMessage()}");
         }
     }
 }

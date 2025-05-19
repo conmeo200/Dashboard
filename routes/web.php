@@ -39,23 +39,41 @@ Route::get('/comsumer-order', function () {
     $rmq = new RabbitMQService();
 
     // Create Exchange
-    //$rmq->createExchange('order_exchange', 'direct'); // Hoặc 'fanout', 'topic'
+    // $rmq->createExchange('order_exchange', 'direct'); // Hoặc 'fanout', 'topic'
 
     // Binding Queue To Exchange
     // $rmq->createQueue('order_queue');
     // $rmq->bindQueueToExchange('order_queue', 'order_exchange', 'order.created');
 
     // Send Message to Exchange
-     $rmq->publishMessage('order_exchange', 'order.created', ['order_id' => 123, 'status' => 'pending']);
-    
+    $rmq->publishMessage('order_exchange', 'order.created', ['order_id' => 123, 'status' => 'pending']);
+
     $rmq->close();
 });
-Route::get('/comsumer-notication', function () {
-    $notication = new NotificationManager();
-    $notication->sendSevice(['notication_messages' => 'Ban co 1 don hang']);
+Route::get('/consumer-notification', function () {
+    $rmq = new RabbitMQService();
 
-    echo 'lUM';
+    // Create Exchange
+    //$rmq->createExchange('notification_exchange', 'direct'); // Hoặc 'fanout', 'topic'
+
+    // Binding Queue To Exchange
+    //$rmq->createQueue('notification_queue');
+    //$rmq->bindQueueToExchange('notification_queue', 'notification_exchange', 'notification.notification');
+
+    // Send Message to Exchange
+    $rmq->publishMessage(
+        'notification_exchange',
+        'notification.notification',
+        [
+            'type'         => '',
+            'notification' => 123,
+            'messages'     => 'Notification Create Order ID #123 Successful !'
+        ]
+    );
+
+    $rmq->close();
 });
+
 
 Route::get('/test-mysql', function () {
     $model = Product::query()->get()->toArray();

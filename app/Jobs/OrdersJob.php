@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class OrdersJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.

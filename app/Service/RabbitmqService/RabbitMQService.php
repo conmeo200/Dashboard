@@ -2,6 +2,7 @@
 
 namespace App\Service\RabbitmqService;
 
+use App\Service\Notification\NotificationManager;
 use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -65,19 +66,23 @@ class RabbitMQService
 
     public function publishMessage(string $exchange, string $routingKey = '', array $data): void
     {
-        if (empty($exchange)) {
-            throw new Exception("Exchange cannot be empty");
+        try {
+            if (empty($exchange)) {
+                throw new Exception("Exchange cannot be empty");
+            }
+    
+            $message = new AMQPMessage(json_encode($data), [
+                'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT, // Durable message
+            ]);
+    
+            $this->channel->basic_publish($message, $exchange, $routingKey);
+    
+            Log::info("Message sent to Exchange: $exchange - RoutingKey: $routingKey");
+    
+            //echo "Message sent to Exchange: $exchange - RoutingKey: $routingKey";
+        } catch (\Throwable $th) {
+            throw new Exception("RabbitMQ Connection Failed", 500);
         }
-
-        $message = new AMQPMessage(json_encode($data), [
-            'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT, // Durable message
-        ]);
-
-        $this->channel->basic_publish($message, $exchange, $routingKey);
-
-        Log::info("Message sent to Exchange: $exchange - RoutingKey: $routingKey");
-
-        echo "Message sent to Exchange: $exchange - RoutingKey: $routingKey";
     }
 
     public function listen(string $queueName): void
@@ -98,26 +103,25 @@ class RabbitMQService
         $this->connection->close();
     }
 
-    public function consumerNotication($queueName)
+    public function consumerNotification()
     {
-        $this->listen($queueName);
+        $queue = 'notification_queue';
+        $this->listen($queue);
 
-        $callback = function ($msg) use($queueName){
-            Log::info("Consumer Notication Received: " . $msg->body);
+        $callback = function ($msg) use($queue){
+            Log::info("Consumer Notification Received: " . $msg->body . "Time :" . now()->timestamp );
             
-            // Xử lý message tại đây
             try {
-                // TODO: Viết logic xử lý message
-                echo "Consumer Notication: " . $msg->body . "\n";
+                NotificationManager::sendService(json_decode($msg->body, true));
                 
                 $msg->ack();
             } catch (Exception $exception) {
-                Log::error("Failed to process message: " . $exception->getMessage() . ", by queue {$queueName}");
-                $msg->nack(); // Reject message, có thể gửi lại queue
+                Log::error("Failed to process message: " . $exception->getMessage() . ", by queue {$queue}");
+                $msg->nack();
             }
         };
 
-        $this->channel->basic_consume($queueName, '', false, false, false, false, $callback);
+        $this->channel->basic_consume($queue, '', false, false, false, false, $callback);
 
         while ($this->channel->is_consuming()) {
             $this->channel->wait();
@@ -129,12 +133,10 @@ class RabbitMQService
         $this->listen($queueName);
 
         $callback = function ($msg) use($queueName){
-            Log::info("Consumer Order Received: " . $msg->body);
+            Log::info("Consumer Order Received: " . $msg->body . "Time :" . now()->timestamp);
             
-            // Xử lý message tại đây
             try {
-                // TODO: Viết logic xử lý message
-                echo "Consumer Order: " . $msg->body . "\n";
+                echo "Consumer Order: " . $msg->body . "\n" . "Time :" . now()->timestamp;
                 
                 $msg->ack();
             } catch (Exception $exception) {
@@ -153,8 +155,8 @@ class RabbitMQService
     public function managerConsumer($queueName)
     {
         switch ($queueName) {
-            case 'notication_queue':
-                $this->consumerNotication($queueName);
+            case 'notification_queue':
+                $this->consumerNotification($queueName);
                 break;
             case 'order_queue':
                 $this->consumerOrder($queueName);

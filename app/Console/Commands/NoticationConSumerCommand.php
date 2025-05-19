@@ -13,9 +13,9 @@ class NoticationConSumerCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'rabbitmq:notication-comsumer';
+    protected $signature = 'rabbitmq:notification-consumer';
 
-    protected $queue_name = "notication_queue";
+    protected $queue_name = "notification_queue";
     /**
      * The console command description.
      *
@@ -42,7 +42,9 @@ class NoticationConSumerCommand extends Command
     {
         try { 
             $consumer = new RabbitMQService();
-            $consumer->consumerNotication($this->queue_name);
+            
+            $consumer->consumerNotification();
+            $consumer->close();
         } catch (\Exception $exception){
             Log::error("Error ConsumeRabbitMQ : {$exception->getMessage()}");
         }

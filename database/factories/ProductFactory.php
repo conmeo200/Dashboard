@@ -15,11 +15,12 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'name'       => $this->faker->sentence,
-            'images'     => $this->faker->imageUrl,
-            'price'      => $this->faker->randomDigit,
-            'created_at' => Carbon::now()->timestamp,
-            'updated_at' => Carbon::now()->timestamp
+            'price'           => $this->faker->randomFloat(2, 10, 1000),
+            'images'          => $this->faker->imageUrl(),
+            'type_product_id' => $this->faker->randomElement([1, 2, 3]),
+            'name'            => $this->faker->words(3, true),
+            'created_at'      => now()->timestamp,
+            'updated_at'      => now()->timestamp,
         ];
     }
 }

@@ -6,40 +6,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * App\Models\Product
- *
- * @property int $id
- * @property string $name
- * @property string $price
- * @property string $currency
- * @property string|null $images
- * @property string|null $created_at
- * @property string|null $updated_at
- * @property int $type_product_id
- * @property-read mixed $created_time_format
- * @property-read mixed $updated_time_format
- * @property-read \App\Models\TypeProduct|null $typeProduct
- * @method static \Database\Factories\ProductFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Product query()
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereCurrency($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereImages($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereTypeProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
- * @mixin \Eloquent
- */
+
 class Product extends Model
 {
     use HasFactory;
     
     protected $table           = 'products';
-    protected $fillable        = ['id', 'name', 'price', 'images', 'type_product_id'];
+    protected $fillable        = ['id', 'name', 'price','currency', 'images', 'type_product_id', 'created_at', 'updated_at'];
     public    $timestamps      = false;
     public    static $instance = [];
     protected $appends         = ['created_time_format', 'updated_time_format'];
