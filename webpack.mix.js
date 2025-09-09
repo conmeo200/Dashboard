@@ -13,7 +13,7 @@ const webpack = require('webpack'); // Thêm dòng này để yêu cầu Webpack
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .vue()
+    
     .postCss('resources/css/app.css', 'public/css', [
         //
     ])

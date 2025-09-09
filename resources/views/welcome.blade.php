@@ -12,9 +12,7 @@
         <script src="/js/BO/validateForm.js"></script>
         <link href="/css/app.css" rel="stylesheet">
     </head>
-    <body>
-            	<div>{{Auth::check() ? Auth::user() : 'No Auth' }}</div>
-            <div id="app"></div>
+    <body> 
+            <h1>123123123</h1>
     </body>
-    <script src="{{ mix('/js/app.js') }}"></script>
 </html>

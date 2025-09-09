@@ -28,7 +28,7 @@ use App\Http\Controllers\NoticationController;
 // Auth
 Route::post('/register', [AuthController::class, 'handleRegister']);
 Route::post('/login', [AuthController::class, 'handleLogin'])->name('login');
-Route::post('/test-notication', [NoticationController::class, 'createOrder']);
+// Route::post('/test-notication', [NoticationController::class, 'createOrder']);
 //Init 
 Route::get('/menus', [MenuController::class, 'initMenu']);
 //End
