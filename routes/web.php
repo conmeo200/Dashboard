@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PayPalController;
-
+use App\Models\User;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,9 @@ use App\Http\Controllers\Api\PayPalController;
 |
 */
 
+Route::get('/', function (){
+    return view('index');
+});
 Route::prefix('paypal')->group(function () {
     Route::get('create-payment', [PayPalController::class, 'createPayment']);
     Route::post('execute-payment', [PayPalController::class, 'executePayment']);
@@ -76,8 +80,12 @@ Route::get('/consumer-notification', function () {
 
 
 Route::get('/test-mysql', function () {
-    $model = Product::query()->get()->toArray();
-    dd($model);
+    try {
+        $model = User::query()->get()->toArray();
+        dd($model);
+    } catch (\Exception $th) {
+        dd($th->getMessage());
+    }
 });
 
 Route::get('/test-redis', function () {
@@ -113,6 +121,6 @@ Route::get('/test-mongodb', function () {
     return response()->json($logs->getAllLogs());
 });
 
-Route::get('{any}', function () {
-    return view('welcome');
-})->where('any', '.*');
+// Route::get('{any}', function () {
+//     return view('welcome');
+// })->where('any', '.*');
