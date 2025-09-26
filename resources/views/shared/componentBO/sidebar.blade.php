@@ -25,25 +25,38 @@
             <li class="nav-item active">
               <a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a>
             </li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="navbar-nav flex-fill w-100 mb-2">
+        <li class="nav-item dropdown">
+          <a href="#nails" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+            <i class="fe fe-home fe-16"></i>
+            <span class="ml-3 item-text">Nails</span><span class="sr-only">(current)</span>
+          </a>
+          <ul class="collapse list-unstyled pl-4 w-100" id="nails">    
             <li class="nav-item">
-              <a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a>
+              <a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Products</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pl-3" href="./dashboard-sales.html"><span class="ml-1 item-text">E-commerce</span></a>
+              <a class="nav-link pl-3" href="./dashboard-sales.html"><span class="ml-1 item-text">Services</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a>
+              <a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Bookings</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Systems</span></a>
+              <a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Payments</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Staff</span></a>
             </li>
           </ul>
         </li>
       </ul>
-      <p class="text-muted nav-heading mt-4 mb-1">
+      <p class="text-muted nav-heading mt-4 mb-1" hidden>
         <span>Components</span>
       </p>
-      <ul class="navbar-nav flex-fill w-100 mb-2">
+      <ul class="navbar-nav flex-fill w-100 mb-2" hidden>
         <li class="nav-item dropdown">
           <a href="#ui-elements" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
             <i class="fe fe-box fe-16"></i>
@@ -148,10 +161,10 @@
           </ul>
         </li>
       </ul>
-      <p class="text-muted nav-heading mt-4 mb-1">
+      <p class="text-muted nav-heading mt-4 mb-1" hidden>
         <span>Apps</span>
       </p>
-      <ul class="navbar-nav flex-fill w-100 mb-2">
+      <ul class="navbar-nav flex-fill w-100 mb-2" hidden>
         <li class="nav-item w-100">
           <a class="nav-link" href="calendar.html">
             <i class="fe fe-calendar fe-16"></i>
@@ -204,10 +217,10 @@
           </ul>
         </li>
       </ul>
-      <p class="text-muted nav-heading mt-4 mb-1">
+      <p class="text-muted nav-heading mt-4 mb-1" hidden>
         <span>Extra</span>
       </p>
-      <ul class="navbar-nav flex-fill w-100 mb-2">
+      <ul class="navbar-nav flex-fill w-100 mb-2" hidden>
         <li class="nav-item dropdown">
           <a href="#pages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
             <i class="fe fe-file fe-16"></i>
@@ -277,10 +290,10 @@
           </ul>
         </li>
       </ul>
-      <p class="text-muted nav-heading mt-4 mb-1">
+      <p class="text-muted nav-heading mt-4 mb-1" hidden>
         <span>Documentation</span>
       </p>
-      <ul class="navbar-nav flex-fill w-100 mb-2">
+      <ul class="navbar-nav flex-fill w-100 mb-2" hidden>
         <li class="nav-item w-100">
           <a class="nav-link" href="../docs/index.html">
             <i class="fe fe-help-circle fe-16"></i>
@@ -288,10 +301,5 @@
           </a>
         </li>
       </ul>
-      <div class="btn-box w-100 mt-4 mb-1">
-        <a href="https://themeforest.net/item/tinydash-bootstrap-html-admin-dashboard-template/27511269" target="_blank" class="btn mb-2 btn-primary btn-lg btn-block">
-          <i class="fe fe-shopping-cart fe-12 mx-2"></i><span class="small">Buy now</span>
-        </a>
-      </div>
     </nav>
   </aside>
