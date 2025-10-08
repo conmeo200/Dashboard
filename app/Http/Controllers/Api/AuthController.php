@@ -77,8 +77,7 @@ class AuthController extends BaseApiController
     }
 
     public function handleLogin(Request $request)
-    {
-       
+    {       
         try {
             $validator = Validator::make($request->all(), [
                 'email'    => ['required', 'email'],

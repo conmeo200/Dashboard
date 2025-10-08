@@ -1,6 +1,7 @@
 <?php
 
 use App\Jobs\EmailJob;
+use App\Http\Controllers\DashBoard\NailsController;
 use App\Jobs\NoticationsJob;
 use App\Jobs\OrdersJob;
 use App\Models\MongoDB\LogActivity;
@@ -33,15 +34,12 @@ Route::get('/', function (){
     return view('index');
 });
 
-Route::get('/products', function () {
-    return view('nails.products.index');
-});
-
-Route::get('/product/{id}', function () {
-    return view('nails.products.create');
-});
-
-
+Route::get('/nails', [NailsController::class, 'index']);
+Route::get('/nails/get-data', [NailsController::class, 'getData']);
+Route::get('/nail/{id}', [NailsController::class, 'detail']);
+Route::post('/nail/create', [NailsController::class, 'create']);
+Route::put('/nail/{id}', [NailsController::class, 'update']);
+Route::delete('/nail/delete', [NailsController::class, 'delete']);
 
 
 

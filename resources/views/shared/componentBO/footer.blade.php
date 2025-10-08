@@ -1,4 +1,3 @@
-<script src="{{asset('js/jquery.min.js')}}"></script>
     <script src="{{asset('js/popper.min.js')}}"></script>
     <script src="{{asset('js/moment.min.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
@@ -13,6 +12,8 @@
     <script src="{{asset('js/datamaps-zoomto.js')}}"></script>
     <script src="{{asset('js/datamaps.custom.js')}}"></script>
     <script src="{{asset('js/Chart.min.js')}}"></script>
+    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
     <script>
       /* defind global options */
       Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;

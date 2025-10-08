@@ -1,4 +1,5 @@
 @extends('index')
+
 @section('content')
 <main role="main" class="main-content">
     <div class="container-fluid">
@@ -179,6 +180,19 @@
                       </tr>                    
                     </tbody>
                   </table>
+
+                  <table class="table datatables" id="dataTable-2" dis>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div> 
@@ -187,4 +201,36 @@
       </div> 
     </div>
 </main> 
+
+<script>
+    $(document).ready(function () {
+        $('#dataTable-1').DataTable(
+            {
+                autoWidth: true,
+                "lengthMenu": [
+                  [16, 32, 64, -1],
+                  [16, 32, 64, "All"]
+                ]
+            }
+        );
+
+        
+        $('#dataTable-2').DataTable( {
+          autoWidth: true,
+          lengthMenu: [
+            [1, 32, 64, -1],
+            [1, 32, 64, "All"]
+          ],
+          ajax: {
+              url: '/nails/get-data',
+              dataSrc : 'data'
+          },
+          columns: [
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'price' },
+          ],
+        } );
+    });
+</script>
 @endsection

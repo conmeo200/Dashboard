@@ -18,6 +18,7 @@
     <!-- App CSS -->
     <link rel="stylesheet" href="{{asset('css/app-light.css')}}" id="lightTheme">
     <link rel="stylesheet" href="{{asset('css/app-dark.css')}}" id="darkTheme" disabled>
+    <script src="{{asset('js/jquery.min.js')}}"></script>
   </head>
   <body class="vertical  dark  ">
     <div class="wrapper">
